@@ -1,0 +1,84 @@
+# =====================================================================
+# TASKFLOW — Application Configuration
+# =====================================================================
+# This file configures your Spring Boot application.
+#
+# WHY YAML over .properties?
+#   application.properties: spring.datasource.url=jdbc:h2:mem:taskflow
+#   application.yml:        spring.datasource.url: jdbc:h2:mem:taskflow (but nested!)
+#   YAML is more readable for nested properties. Both work the same.
+#
+# SPRING PROFILES:
+#   This file = DEFAULT config (always loaded)
+#   application-dev.yml = loaded when spring.profiles.active=dev
+#   application-prod.yml = loaded when spring.profiles.active=prod
+#   Profile-specific files OVERRIDE values in this file.
+# =====================================================================
+
+spring:
+  application:
+    name: TaskFlow
+
+  # ---- DATABASE CONFIGURATION ----
+  # Using H2 in-memory database for development.
+  # In production, switch to PostgreSQL (see application-prod.yml).
+  #
+  # H2 = lightweight Java database that runs IN MEMORY
+  #   - Perfect for development: no setup, auto-creates tables
+  #   - Data is LOST when app stops (it's in memory!)
+  #   - Has a web console to view data: http://localhost:8080/h2-console
+  datasource:
+    url: jdbc:h2:mem:taskflow
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # ---- JPA / HIBERNATE CONFIGURATION ----
+  # JPA = specification for ORM (Object-Relational Mapping)
+  # Hibernate = the implementation of JPA
+  #
+  # ddl-auto options:
+  #   create       — DROP all tables, then CREATE (loses data!)
+  #   create-drop  — CREATE on startup, DROP on shutdown
+  #   update       — ALTER tables to match entities (safe for dev)
+  #   validate     — only CHECK if tables match entities (production)
+  #   none         — do nothing (use Flyway for migrations in prod)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    # Let Hibernate know we're using H2 dialect (SQL syntax)
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  # ---- H2 CONSOLE ----
+  # Access at: http://localhost:8080/h2-console
+  # JDBC URL: jdbc:h2:mem:taskflow (must match datasource.url above!)
+  # Username: sa, Password: (empty)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# ---- JWT CONFIGURATION ----
+# secret: Base64-encoded secret key (minimum 256 bits for HS256)
+# access-token-expiration: 15 minutes in milliseconds
+# refresh-token-expiration: 7 days in milliseconds
+jwt:
+  secret: dGFza2Zsb3ctc2VjcmV0LWtleS10aGlzLWlzLWEtdmVyeS1sb25nLXNlY3JldC1rZXktZm9yLWhtYWMtc2hhMjU2LWFsZ29yaXRobQ==
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
+
+# ---- SERVER CONFIGURATION ----
+server:
+  port: 8080
+
+# ---- SWAGGER / OPENAPI ----
+# Access at: http://localhost:8080/swagger-ui.html
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

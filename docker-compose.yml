@@ -1,0 +1,78 @@
+# =====================================================================
+# DOCKER COMPOSE — Run the entire application stack with ONE command.
+# =====================================================================
+#
+# WHAT IS DOCKER COMPOSE?
+#   A tool that defines and runs multi-container Docker applications.
+#   Instead of running each service separately:
+#     docker run postgres ...
+#     docker run redis ...
+#     docker run taskflow ...
+#   You define everything in this file and run: docker-compose up
+#
+# WHAT IS DOCKER?
+#   Docker packages your app + its dependencies into a "container".
+#   A container is like a lightweight virtual machine:
+#     - Has its own filesystem, network, processes
+#     - But shares the host OS kernel (much lighter than a VM)
+#     - Runs the same everywhere: your laptop, server, cloud
+#
+# WHY DOCKER?
+#   "It works on my machine" problem SOLVED.
+#   You define exactly what your app needs, and Docker creates
+#   that exact environment every time, everywhere.
+#
+# HOW TO USE:
+#   Start everything:    docker-compose up -d
+#   See logs:            docker-compose logs -f
+#   Stop everything:     docker-compose down
+#   Stop + delete data:  docker-compose down -v
+#
+# SERVICES DEFINED:
+#   1. postgres — PostgreSQL database (production DB)
+#   2. redis — Redis cache (for caching + rate limiting)
+#   3. app — Our Spring Boot TaskFlow application
+# =====================================================================
+
+services:
+  # ---- POSTGRESQL DATABASE ----
+  # PostgreSQL = production-grade relational database
+  # We use this instead of H2 when running with Docker.
+  postgres:
+    image: postgres:16-alpine          # Official PostgreSQL image (alpine = smaller)
+    container_name: taskflow-postgres
+    environment:
+      POSTGRES_DB: taskflow            # Create this database on startup
+      POSTGRES_USER: taskflow          # Database username
+      POSTGRES_PASSWORD: taskflow123   # Database password (change in production!)
+    ports:
+      - "5432:5432"                    # Map container port to host port
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Persist data across restarts
+    # Health check — Docker will wait until PostgreSQL is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---- REDIS CACHE ----
+  # Redis = in-memory data store (super fast!)
+  # Used for: caching, rate limiting, session storage
+  # Data is in memory = blazing fast reads/writes
+  redis:
+    image: redis:7-alpine
+    container_name: taskflow-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# ---- VOLUMES ----
+# Named volumes persist data even when containers are stopped/removed.
+# Without volumes, all data is lost when the container stops!
+volumes:
+  postgres-data:
