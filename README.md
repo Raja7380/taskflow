@@ -2,6 +2,23 @@
 
 A **resume-ready, full-stack project** built to learn and demonstrate modern enterprise Java development.
 
+---
+
+## 🔰 START HERE — New to Spring Boot?
+
+If annotations like `@RestController`, `@Service`, `@Entity` look confusing, **read these docs FIRST** before looking at any code:
+
+| # | Doc | What You'll Learn | Time |
+|---|-----|-------------------|------|
+| 1 | [`docs/00_WHAT_ARE_ANNOTATIONS.md`](docs/00_WHAT_ARE_ANNOTATIONS.md) | What annotations are, how Spring uses them, WHY they exist | 15 min |
+| 2 | [`docs/01_ANNOTATIONS_CHEATSHEET.md`](docs/01_ANNOTATIONS_CHEATSHEET.md) | Quick-reference card for EVERY annotation in this project | Keep open |
+| 3 | [`docs/02_REQUEST_FLOW.md`](docs/02_REQUEST_FLOW.md) | How a register/login request travels through ALL files step by step | 10 min |
+| 4 | [`docs/03_IMPORTS_EXPLAINED.md`](docs/03_IMPORTS_EXPLAINED.md) | What all those import lines mean (7 groups) | 5 min |
+
+**After reading these 4 docs, the code will make sense.** Then follow the reading order below.
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -69,17 +86,24 @@ This project is designed for learning. Every file contains:
 - **HOW comments** — explains how things work internally
 - **Interview Q&A** — common interview questions related to that code
 
-### Suggested reading order:
-1. `TaskFlowApplication.java` — Entry point, @SpringBootApplication explained
-2. `entity/User.java` — JPA entity, UserDetails, Lombok
-3. `repository/UserRepository.java` — Spring Data JPA, derived queries
-4. `dto/` — DTO pattern, validation annotations
-5. `security/jwt/JwtService.java` — JWT creation and validation
-6. `security/filter/JwtAuthenticationFilter.java` — Security filter chain
-7. `config/SecurityConfig.java` — Spring Security configuration
-8. `service/AuthService.java` — Business logic, service layer pattern
-9. `controller/AuthController.java` — REST controller, HTTP methods
-10. `exception/GlobalExceptionHandler.java` — Centralized error handling
+### Suggested reading order (simplest → hardest):
+
+**Read the docs first:** `docs/00_WHAT_ARE_ANNOTATIONS.md` → `01_ANNOTATIONS_CHEATSHEET.md` → `02_REQUEST_FLOW.md` → `03_IMPORTS_EXPLAINED.md`
+
+**Then read code files in this order:**
+1. `entity/Role.java` — Simplest file (just an enum with 3 values)
+2. `entity/User.java` — Database entity, see @Entity, @Table, @Column, @Data
+3. `repository/UserRepository.java` — Spring auto-generates database code
+4. `dto/request/RegisterRequest.java` — Validation annotations (@NotBlank, @Email)
+5. `dto/request/LoginRequest.java` — Same pattern, simpler
+6. `dto/response/AuthResponse.java` — Builder pattern for responses
+7. `service/AuthService.java` — Business logic, @Service, dependency injection
+8. `controller/AuthController.java` — REST API, @PostMapping, @Valid, @RequestBody
+9. `controller/HealthController.java` — Simplest controller (sanity check)
+10. `security/jwt/JwtService.java` — Token creation, @Value reads from config
+11. `security/filter/JwtAuthenticationFilter.java` — Security filter
+12. `config/SecurityConfig.java` — Security rules (@Configuration, @Bean)
+13. `exception/GlobalExceptionHandler.java` — Catches all errors centrally
 
 ## Roadmap
 
