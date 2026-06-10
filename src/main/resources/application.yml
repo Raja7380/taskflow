@@ -1,71 +1,100 @@
 # =====================================================================
 # TASKFLOW — Application Configuration
 # =====================================================================
-# This file configures your Spring Boot application.
 #
-# WHY YAML over .properties?
-#   application.properties: spring.datasource.url=jdbc:h2:mem:taskflow
-#   application.yml:        spring.datasource.url: jdbc:h2:mem:taskflow (but nested!)
-#   YAML is more readable for nested properties. Both work the same.
+# WHAT IS THIS FILE?
+#   This file configures your Spring Boot application.
+#   Spring Boot reads this on startup and sets up DB, JWT, server, etc.
+#
+# WHY YAML FORMAT?
+#   YAML uses indentation to show nesting (like Python).
+#   Alternative is .properties files — both work the same.
+#   YAML is more readable for nested config.
+#
+#   Properties style:   spring.datasource.url=jdbc:postgresql://...
+#   YAML style:         spring:
+#                         datasource:
+#                           url: jdbc:postgresql://...
 #
 # SPRING PROFILES:
-#   This file = DEFAULT config (always loaded)
-#   application-dev.yml = loaded when spring.profiles.active=dev
-#   application-prod.yml = loaded when spring.profiles.active=prod
-#   Profile-specific files OVERRIDE values in this file.
+#   This file = DEFAULT (always loaded)
+#   application-test.yml = loaded when running tests (uses H2 in-memory)
+#   Set profile: -Dspring.profiles.active=test
 # =====================================================================
 
 spring:
   application:
     name: TaskFlow
 
-  # ---- DATABASE CONFIGURATION ----
-  # Using H2 in-memory database for development.
-  # In production, switch to PostgreSQL (see application-prod.yml).
+  # ---- POSTGRESQL DATABASE CONFIGURATION ----
   #
-  # H2 = lightweight Java database that runs IN MEMORY
-  #   - Perfect for development: no setup, auto-creates tables
-  #   - Data is LOST when app stops (it's in memory!)
-  #   - Has a web console to view data: http://localhost:8080/h2-console
+  # WHAT IS POSTGRESQL?
+  #   PostgreSQL is a production-grade relational database.
+  #   It runs as a SEPARATE PROCESS from your Spring Boot app.
+  #   Data is stored on DISK — survives restarts, power outages.
+  #   Used by: Instagram, Spotify, Reddit, GitLab, Discord.
+  #
+  # HOW IT DIFFERS FROM H2:
+  #   H2  = in-memory, dies when app stops, for learning/tests only
+  #   PostgreSQL = persistent, production-ready, real companies use this
+  #
+  # JDBC URL FORMAT:
+  #   jdbc:postgresql://HOST:PORT/DATABASE_NAME
+  #   jdbc:postgresql://localhost:5432/taskflow
+  #                     ^         ^    ^
+  #                     host      port database name
+  #
+  # HOW TO START POSTGRESQL:
+  #   Run: docker-compose up -d postgres adminer
+  #   Then start the Spring Boot app.
+  #
   datasource:
-    url: jdbc:h2:mem:taskflow
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/taskflow
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres123
+    # HikariCP = connection pool (reuses DB connections instead of creating new ones)
+    # Without pooling: each request creates/closes a DB connection = very slow
+    hikari:
+      maximum-pool-size: 10        # max 10 simultaneous DB connections
+      minimum-idle: 5              # keep 5 connections ready at all times
+      connection-timeout: 30000    # wait max 30s for a connection before error
+      idle-timeout: 600000         # close idle connections after 10 minutes
 
   # ---- JPA / HIBERNATE CONFIGURATION ----
-  # JPA = specification for ORM (Object-Relational Mapping)
-  # Hibernate = the implementation of JPA
+  #
+  # JPA = specification for mapping Java objects ↔ database tables
+  # Hibernate = the implementation (does the actual SQL generation)
   #
   # ddl-auto options:
-  #   create       — DROP all tables, then CREATE (loses data!)
-  #   create-drop  — CREATE on startup, DROP on shutdown
-  #   update       — ALTER tables to match entities (safe for dev)
-  #   validate     — only CHECK if tables match entities (production)
-  #   none         — do nothing (use Flyway for migrations in prod)
+  #   update   — alter tables to match entities (safe for dev, data preserved)
+  #   validate — only check tables match, throw error if not (use in prod)
+  #   create   — DROP + CREATE tables every start (LOSES ALL DATA)
+  #   none     — do nothing (use Flyway for migrations in production)
+  #
+  # We use "update" now — Hibernate auto-creates/alters tables.
+  # Session 10 upgrades this to Flyway (proper migration files).
+  #
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: true                 # prints every SQL query to console (great for learning)
     properties:
       hibernate:
-        format_sql: true
-    # Let Hibernate know we're using H2 dialect (SQL syntax)
-    database-platform: org.hibernate.dialect.H2Dialect
-
-  # ---- H2 CONSOLE ----
-  # Access at: http://localhost:8080/h2-console
-  # JDBC URL: jdbc:h2:mem:taskflow (must match datasource.url above!)
-  # Username: sa, Password: (empty)
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+        format_sql: true           # formats SQL nicely with line breaks
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 # ---- JWT CONFIGURATION ----
-# secret: Base64-encoded secret key (minimum 256 bits for HS256)
-# access-token-expiration: 15 minutes in milliseconds
-# refresh-token-expiration: 7 days in milliseconds
+#
+# jwt.secret = HMAC-SHA256 signing key (Base64 encoded, minimum 256 bits)
+# access-token-expiration  = 15 minutes in milliseconds (900000 ms)
+# refresh-token-expiration = 7 days in milliseconds    (604800000 ms)
+#
+# SECURITY NOTE: In production, load secret from environment variable:
+#   secret: ${JWT_SECRET}
+# NEVER hardcode secrets in production config files committed to git.
+#
 jwt:
   secret: dGFza2Zsb3ctc2VjcmV0LWtleS10aGlzLWlzLWEtdmVyeS1sb25nLXNlY3JldC1rZXktZm9yLWhtYWMtc2hhMjU2LWFsZ29yaXRobQ==
   access-token-expiration: 900000
@@ -76,7 +105,8 @@ server:
   port: 8080
 
 # ---- SWAGGER / OPENAPI ----
-# Access at: http://localhost:8080/swagger-ui.html
+# Visual API documentation — access at: http://localhost:8080/swagger-ui.html
+# Raw JSON spec at: http://localhost:8080/v3/api-docs
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

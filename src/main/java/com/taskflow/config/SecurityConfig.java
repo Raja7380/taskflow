@@ -76,11 +76,10 @@ public class SecurityConfig {
                         // Public endpoints — no authentication needed
                         .requestMatchers(
                                 "/api/auth/**",           // Login, register, refresh token
-                                "/api/health",             // Health check
-                                "/swagger-ui/**",          // Swagger UI pages
-                                "/swagger-ui.html",        // Swagger entry point
-                                "/v3/api-docs/**",         // OpenAPI JSON docs
-                                "/h2-console/**"           // H2 database console (dev only)
+                                "/api/health",            // Health check
+                                "/swagger-ui/**",         // Swagger UI pages
+                                "/swagger-ui.html",       // Swagger entry point
+                                "/v3/api-docs/**"         // OpenAPI JSON docs
                         ).permitAll()
 
                         // ADMIN-only endpoints
@@ -101,8 +100,8 @@ public class SecurityConfig {
                 // Add JWT filter BEFORE Spring's default username/password filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // Allow H2 console to render in iframes (dev only)
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+                // Standard security headers
+                .headers(headers -> headers.frameOptions(frame -> frame.deny()));
 
         return http.build();
     }

@@ -3,6 +3,7 @@ package com.taskflow.exception;
 import com.taskflow.dto.response.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -86,6 +87,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+    }
+
+    /**
+     * Handles AccessDeniedException — thrown when a user tries to do something
+     * they're not authorized for (e.g., non-owner trying to delete a project).
+     * Returns 403 Forbidden.
+     *
+     * Note: Spring Security also throws AccessDeniedException for filter-level
+     * rejections. Our handler catches both — service-level and filter-level.
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

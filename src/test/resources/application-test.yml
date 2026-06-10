@@ -1,0 +1,32 @@
+# =====================================================================
+# TEST CONFIGURATION — Used ONLY when running tests
+# =====================================================================
+#
+# WHY A SEPARATE TEST CONFIG?
+#   Tests should be:
+#     1. Fast — H2 in-memory starts in milliseconds, PostgreSQL needs Docker
+#     2. Isolated — tests reset DB between runs automatically
+#     3. No setup — developer shouldn't need Docker running to run tests
+#
+# This file OVERRIDES application.yml values when tests run.
+# Spring Boot automatically loads application-test.yml when profile = test.
+# =====================================================================
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:taskflow-test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop          # create tables before tests, drop after
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: false

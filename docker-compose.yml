@@ -37,29 +37,44 @@
 services:
   # ---- POSTGRESQL DATABASE ----
   # PostgreSQL = production-grade relational database
-  # We use this instead of H2 when running with Docker.
+  # Runs as its own process, data survives app restarts
+  # Used by: Instagram, Spotify, Reddit, Gitlab
   postgres:
-    image: postgres:16-alpine          # Official PostgreSQL image (alpine = smaller)
+    image: postgres:16-alpine          # Official PostgreSQL image (alpine = smaller size)
     container_name: taskflow-postgres
     environment:
-      POSTGRES_DB: taskflow            # Create this database on startup
-      POSTGRES_USER: taskflow          # Database username
-      POSTGRES_PASSWORD: taskflow123   # Database password (change in production!)
+      POSTGRES_DB: taskflow            # Creates a database named "taskflow" on first start
+      POSTGRES_USER: taskflow          # Username to connect
+      POSTGRES_PASSWORD: taskflow123   # Password (change this in production!)
     ports:
-      - "5432:5432"                    # Map container port to host port
+      - "5432:5432"                    # host:container — access from localhost:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data  # Persist data across restarts
-    # Health check — Docker will wait until PostgreSQL is ready
+      - postgres-data:/var/lib/postgresql/data  # data survives container restarts
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U taskflow"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  # ---- ADMINER — Database Visual UI ----
+  # Adminer = web-based tool to SEE your database tables and data
+  # Access at: http://localhost:8090
+  # Login with: System=PostgreSQL, Server=postgres, User=taskflow, Password=taskflow123, DB=taskflow
+  #
+  # WHY Adminer?
+  #   H2 had a built-in console. PostgreSQL doesn't.
+  #   Adminer gives you the same ability — browse tables, run SQL, see data.
+  adminer:
+    image: adminer:latest
+    container_name: taskflow-adminer
+    ports:
+      - "8090:8080"                    # Access at http://localhost:8090
+    depends_on:
+      - postgres
+
   # ---- REDIS CACHE ----
   # Redis = in-memory data store (super fast!)
   # Used for: caching, rate limiting, session storage
-  # Data is in memory = blazing fast reads/writes
   redis:
     image: redis:7-alpine
     container_name: taskflow-redis
@@ -73,6 +88,6 @@ services:
 
 # ---- VOLUMES ----
 # Named volumes persist data even when containers are stopped/removed.
-# Without volumes, all data is lost when the container stops!
+# Without volumes, all PostgreSQL data is lost when container stops!
 volumes:
   postgres-data:

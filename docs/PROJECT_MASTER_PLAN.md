@@ -1,116 +1,139 @@
 # TaskFlow — Complete Project Master Plan
 
-> **PURPOSE**: This document is the complete blueprint of the TaskFlow project.
-> It contains everything that has been done AND everything that needs to be done.
-> 
-> **PORTABLE**: You can give this document to ANY AI (ChatGPT, Claude, Cursor, Copilot, Devin, or any other)
-> and they will know exactly where to pick up and what to build next.
-> 
-> **Last Updated**: Session 1 complete (June 2026)
+> **PURPOSE**: This is the single source of truth for the TaskFlow project.
+> Contains everything done AND everything to build next — backend AND frontend.
+>
+> **PORTABLE**: Give this to ANY AI and they will know exactly where to pick up.
+>
+> **Last Updated**: PostgreSQL migration + full frontend + add-on sessions added (June 2026)
 
 ---
 
 ## TABLE OF CONTENTS
 
 1. [Project Overview](#1-project-overview)
-2. [Tech Stack (Complete)](#2-tech-stack-complete)
+2. [Complete Tech Stack](#2-complete-tech-stack)
 3. [Repo Info & Setup](#3-repo-info--setup)
-4. [What's DONE (Session 1)](#4-whats-done-session-1)
-5. [Session 2: Projects & Tasks CRUD](#5-session-2-projects--tasks-crud)
-6. [Session 3: Workflow + Filtering + Pagination](#6-session-3-workflow--filtering--pagination)
-7. [Session 4: AOP + Events + Scheduling](#7-session-4-aop--events--scheduling)
-8. [Session 5: Razorpay Payment Integration](#8-session-5-razorpay-payment-integration)
-9. [Session 6: Redis Caching + Performance](#9-session-6-redis-caching--performance)
-10. [Session 7: Apache Kafka + Event-Driven](#10-session-7-apache-kafka--event-driven)
-11. [Session 8: React Frontend — Auth + Setup](#11-session-8-react-frontend--auth--setup)
-12. [Session 9: React Frontend — Dashboard + Tasks](#12-session-9-react-frontend--dashboard--tasks)
-13. [Session 10: Docker + Testing + Deployment](#13-session-10-docker--testing--deployment)
-14. [Learning Folders (Reference Guides)](#14-learning-folders-reference-guides)
-15. [Coding Conventions](#15-coding-conventions)
-16. [How to Give This to Another AI](#16-how-to-give-this-to-another-ai)
+4. [PostgreSQL Setup Guide](#4-postgresql-setup-guide)
+5. [Frontend Technologies Explained](#5-frontend-technologies-explained)
+6. [What's DONE — Session 1](#6-whats-done--session-1)
+7. [Session 2: Projects & Tasks CRUD](#7-session-2-projects--tasks-crud)
+8. [Session 3: Workflow + Filtering + Pagination](#8-session-3-workflow--filtering--pagination)
+9. [Session 4: AOP + Events + Scheduling](#9-session-4-aop--events--scheduling)
+10. [Session 5: Razorpay Payment Integration](#10-session-5-razorpay-payment-integration)
+11. [Session 6: Redis Caching + Performance](#11-session-6-redis-caching--performance)
+12. [Session 7: Apache Kafka + Event-Driven](#12-session-7-apache-kafka--event-driven)
+13. [Session 8: React Frontend — Auth + Setup](#13-session-8-react-frontend--auth--setup)
+14. [Session 9: React Frontend — Dashboard + Tasks](#14-session-9-react-frontend--dashboard--tasks)
+15. [Session 10: Docker + Testing + Deployment](#15-session-10-docker--testing--deployment)
+16. [Session 11: Spring AI Integration](#16-session-11-spring-ai-integration)
+17. [Session 12: WebSockets — Real-Time Features](#17-session-12-websockets--real-time-features)
+18. [Session 13: OAuth2 Social Login](#18-session-13-oauth2-social-login)
+19. [Session 14: Rate Limiting + Email + File Upload](#19-session-14-rate-limiting--email--file-upload)
+20. [Session 15: Observability — Prometheus + Grafana](#20-session-15-observability--prometheus--grafana)
+21. [Session 16: Frontend Add-ons](#21-session-16-frontend-add-ons)
+22. [Session 17: Elasticsearch](#22-session-17-elasticsearch)
+23. [Learning Folders](#23-learning-folders)
+24. [Coding Conventions](#24-coding-conventions)
+25. [Complete Week-by-Week Learning Roadmap](#25-complete-week-by-week-learning-roadmap)
+26. [Resume Lines — Final Version](#26-resume-lines--final-version)
+27. [How to Give This to Another AI](#27-how-to-give-this-to-another-ai)
 
 ---
 
 ## 1. Project Overview
 
-**TaskFlow** is a full-stack Project Management System built to:
-- Demonstrate enterprise Java development skills for resume/interviews
-- Cover 100+ technologies/concepts companies hiring at 15+ LPA expect
-- Serve as BOTH a working application AND a learning resource (every file has detailed WHY/HOW comments + interview Q&A)
+**TaskFlow** is a full-stack AI-powered Project Management System built to:
+- Demonstrate enterprise Java + React skills for SDE1 interviews (15+ LPA target)
+- Cover every technology companies hiring freshers in 2026 actually use
+- Serve as both a working application AND a learning resource
 
 **Target User**: Raja — 2026 BTech graduate, learning Java + Spring + React from scratch.
-**Goal**: Land a 15+ LPA job within 1 month with this project on resume.
-**Timeline**: ~10 sessions across 1 month (aggressive pace).
+**Goal**: Land a 15+ LPA SDE1 job in 2026.
+**Database**: PostgreSQL (switched from H2 in June 2026)
 
 ---
 
-## 2. Tech Stack (Complete)
+## 2. Complete Tech Stack
 
 ### Backend (Java/Spring)
 | Technology | Version | Purpose |
-|-----------|---------|---------|
+|---|---|---|
 | Java | 17 | Language |
-| Spring Boot | 3.5.0 | Application framework |
-| Spring Security 6 | (via Boot) | Authentication & authorization |
-| Spring Data JPA | (via Boot) | Database access (ORM) |
-| Hibernate | (via JPA) | Object-relational mapping |
+| Spring Boot | 3.5.0 | Application framework + auto-configuration |
+| Spring Security 6 | via Boot | Authentication & authorization |
+| Spring Data JPA | via Boot | Database access (ORM) |
+| Hibernate | via JPA | Object-relational mapping implementation |
 | JWT (jjwt) | 0.12.6 | Stateless authentication tokens |
-| Lombok | (via Boot) | Reduce boilerplate code |
-| Bean Validation | (via Boot) | Input validation (@NotBlank, @Email) |
-| MapStruct | TBD (Session 2) | DTO ↔ Entity mapping |
-| Spring AOP | (via Boot) | Cross-cutting concerns (logging, audit) |
-| Spring Events | (via Boot) | Event-driven architecture |
-| Spring Scheduler | (via Boot) | Cron jobs, @Scheduled tasks |
-| Spring Cache + Redis | TBD (Session 6) | Caching layer |
-| Spring Retry | TBD (Session 4) | Retry failed operations |
+| Lombok | via Boot | Eliminate boilerplate code |
+| Bean Validation | via Boot | Input validation (@NotBlank, @Email) |
+| MapStruct | Session 2 | DTO ↔ Entity mapping |
+| Spring AOP | via Boot | Cross-cutting concerns (logging, audit) |
+| Spring Events | via Boot | Event-driven architecture |
+| Spring Scheduler | via Boot | Cron jobs, @Scheduled tasks |
+| Spring Cache + Redis | Session 6 | Caching layer |
+| Spring Retry | Session 4 | Retry failed operations |
+| Spring AI | Session 11 | AI integration (Claude/GPT) |
+| Spring WebSocket | Session 12 | Real-time bidirectional communication |
+| Spring Security OAuth2 | Session 13 | Social login (Google) |
+| Bucket4j | Session 14 | Rate limiting |
+| JavaMailSender | Session 14 | Email notifications |
 | Springdoc OpenAPI | 2.8.8 | Swagger/API documentation |
+| Spring Actuator | Session 15 | Health + metrics endpoints |
 
-### Database
+### Database & Storage
 | Technology | Purpose |
-|-----------|---------|
-| H2 | Development (in-memory, zero setup) |
-| PostgreSQL 16 | Production (via Docker) |
-| Flyway | Database migrations (Session 2+) |
-| Redis 7 | Caching (Session 6) |
+|---|---|
+| PostgreSQL 16 | Primary database (dev + production) |
+| H2 | Tests only (fast, no Docker needed) |
+| Flyway | Database migrations (Session 10) |
+| Redis 7 | Caching + rate limiting |
+| AWS S3 | File attachments (Session 14) |
+| Elasticsearch | Full-text search (Session 17) |
 
 ### Messaging
 | Technology | Purpose |
-|-----------|---------|
+|---|---|
 | Apache Kafka | Event streaming (Session 7) |
 
 ### Payments
 | Technology | Purpose |
-|-----------|---------|
+|---|---|
 | Razorpay Java SDK | Payment integration (Session 5) |
 
 ### Frontend
 | Technology | Purpose |
-|-----------|---------|
-| React 18 | UI framework |
+|---|---|
+| React 18 | UI component library |
 | TypeScript | Type-safe JavaScript |
-| Vite | Build tool |
-| Tailwind CSS | Styling |
-| React Router | Page navigation |
+| Vite | Build tool (converts TypeScript/JSX → browser JS) |
+| Tailwind CSS | Utility-first styling |
+| React Router | Client-side routing (SPA navigation) |
 | Axios | HTTP client (calls Spring Boot API) |
-| Zustand or Redux Toolkit | State management |
-| React Query (TanStack) | Server state caching |
-| React Hook Form | Form handling |
-| Recharts | Dashboard charts |
+| Zustand | Global state management (user, token) |
+| React Query (TanStack) | Server state — caching, background refetch |
+| React Hook Form | Form handling + validation |
+| Recharts | Charts and data visualizations |
+| dnd-kit | Drag-and-drop (Kanban board) |
+| Framer Motion | Animations and transitions (Session 16) |
+| React Testing Library | Frontend component tests (Session 16) |
 
-### DevOps
+### DevOps & Observability
 | Technology | Purpose |
-|-----------|---------|
+|---|---|
 | Docker | Containerization |
-| Docker Compose | Multi-container (app + DB + Redis + Kafka) |
+| Docker Compose | Multi-container stack |
 | GitHub Actions | CI/CD pipeline |
+| Prometheus | Metrics collection |
+| Grafana | Metrics visualization / dashboards |
 
 ### Testing
 | Technology | Purpose |
-|-----------|---------|
+|---|---|
 | JUnit 5 | Unit testing |
-| Mockito | Mocking |
+| Mockito | Mocking dependencies |
 | Spring Boot Test | Integration testing |
-| JaCoCo | Code coverage |
+| JaCoCo | Code coverage reports |
 
 ---
 
@@ -118,1068 +141,1192 @@
 
 **GitHub URL**: https://github.com/Raja7380/taskflow.git
 **Default Branch**: main
-**Current Feature Branch**: devin/session-1-project-setup (merged or ready to merge)
 
-**Git Commit Convention**: All commits under:
+**Git Commit Convention**:
 - Name: `Raja`
 - Email: `rajasingh12587@gmail.com`
-- Use env vars: `GIT_AUTHOR_NAME="Raja" GIT_AUTHOR_EMAIL="rajasingh12587@gmail.com" GIT_COMMITTER_NAME="Raja" GIT_COMMITTER_EMAIL="rajasingh12587@gmail.com"`
 
-**How to Run (Dev mode with H2)**:
+**How to Run (Development with PostgreSQL)**:
 ```bash
-git clone https://github.com/Raja7380/taskflow.git
-cd taskflow
+# Step 1: Start PostgreSQL and Adminer (database viewer)
+docker-compose up -d postgres adminer
+
+# Step 2: Run Spring Boot app
 ./mvnw spring-boot:run
-# App at: http://localhost:8080
+
+# App:     http://localhost:8080
 # Swagger: http://localhost:8080/swagger-ui.html
-# H2 Console: http://localhost:8080/h2-console (JDBC URL: jdbc:h2:mem:taskflow)
+# DB GUI:  http://localhost:8090  (login: PostgreSQL / postgres / taskflow / taskflow123 / taskflow)
 ```
 
-**How to Run (with Docker — PostgreSQL + Redis)**:
+**How to Run (Full Stack with Docker)**:
 ```bash
 docker-compose up -d
-./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
+./mvnw spring-boot:run
 ```
 
-**Build Tool**: Maven (with .mvn wrapper)
-**Java Version**: 17 (set in pom.xml)
+**How to Run Tests** (uses H2 automatically, no Docker needed):
+```bash
+./mvnw test
+```
 
 ---
 
-## 4. What's DONE (Session 1)
+## 4. PostgreSQL Setup Guide
+
+### What is PostgreSQL?
+
+PostgreSQL is a production-grade relational database. It runs as a separate program on your computer (or server), stores data in files on disk, and survives restarts.
+
+```
+H2 (old):                          PostgreSQL (new):
+─────────────────────              ──────────────────────────────
+Lives inside your Java app         Runs as its own separate process
+Stored in RAM — lost on restart    Stored on disk — survives forever
+No installation needed             Needs to be running before app starts
+Fine for learning/tests            Used in real production systems
+```
+
+### Option A — Docker (Recommended, Already Configured)
+
+Docker is the easiest way — no PostgreSQL installation needed. Your `docker-compose.yml` already has everything.
+
+**Step 1: Install Docker Desktop**
+Download from: https://www.docker.com/products/docker-desktop/
+Install it and start it (you'll see the Docker whale icon in your taskbar).
+
+**Step 2: Start PostgreSQL**
+```bash
+# In your project folder:
+docker-compose up -d postgres adminer
+```
+
+This downloads the PostgreSQL image once (~80MB) and starts it in a container.
+
+**Step 3: Verify it's running**
+```bash
+docker-compose ps
+# Should show: taskflow-postgres   running
+# Should show: taskflow-adminer    running
+```
+
+**Step 4: Open Adminer (database viewer)**
+Go to: http://localhost:8090
+
+Fill in the login form:
+```
+System:   PostgreSQL
+Server:   postgres
+Username: taskflow
+Password: taskflow123
+Database: taskflow
+```
+
+You'll see your database. After running the app, you'll see the `users` table appear here.
+
+### Option B — Direct Install (Without Docker)
+
+**Step 1**: Download PostgreSQL 16 from https://www.postgresql.org/download/windows/
+
+**Step 2**: Install with default settings. Remember the password you set for the `postgres` superuser.
+
+**Step 3**: Open pgAdmin (installs with PostgreSQL), create a database:
+```sql
+CREATE DATABASE taskflow;
+CREATE USER taskflow WITH PASSWORD 'taskflow123';
+GRANT ALL PRIVILEGES ON DATABASE taskflow TO taskflow;
+```
+
+**Step 4**: `application.yml` is already configured — no changes needed.
+
+### How PostgreSQL Stores Your Data
+
+```
+PostgreSQL Server (running on port 5432)
+└── Database: taskflow
+    └── Schema: public
+        ├── Table: users
+        │   ├── id (BIGSERIAL PRIMARY KEY)
+        │   ├── full_name (VARCHAR 100)
+        │   ├── email (VARCHAR 150 UNIQUE)
+        │   ├── password (VARCHAR)
+        │   ├── role (VARCHAR)
+        │   ├── created_at (TIMESTAMP)
+        │   └── updated_at (TIMESTAMP)
+        ├── Table: projects  (Session 2)
+        ├── Table: tasks     (Session 2)
+        └── Table: project_members (Session 2)
+```
+
+Hibernate reads your `@Entity` classes and creates these tables automatically (`ddl-auto: update`).
+
+### Common PostgreSQL Commands (run in Adminer SQL tab)
+```sql
+-- See all tables
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
+
+-- See all users
+SELECT id, full_name, email, role, created_at FROM users;
+
+-- See a user's password hash (should never be plain text!)
+SELECT email, password FROM users;
+
+-- Delete all data (careful!)
+DELETE FROM users;
+
+-- Count rows
+SELECT COUNT(*) FROM users;
+```
+
+---
+
+## 5. Frontend Technologies Explained
+
+### What is the Frontend?
+
+The frontend is everything the user sees and interacts with in the browser. It's a separate application from your Spring Boot backend.
+
+```
+BACKEND (Spring Boot)              FRONTEND (React)
+─────────────────────              ─────────────────
+Runs on your SERVER                Runs in USER'S BROWSER
+Handles data, logic, auth          Handles UI, user interactions
+Returns JSON responses             Shows JSON as visual components
+Port 8080                          Port 5173 (dev) or 80 (production)
+```
+
+They communicate over HTTP — React calls your Spring Boot API.
+
+### HTML — Structure
+Every webpage is made of HTML elements. React generates HTML.
+```html
+<div>
+  <h1>TaskFlow</h1>
+  <button>Create Task</button>
+</div>
+```
+
+### CSS — Appearance
+Makes HTML look good — colors, sizes, layouts.
+```css
+button { background: blue; color: white; padding: 10px; }
+```
+
+### JavaScript — Behavior
+Makes pages interactive — responds to clicks, fetches data.
+```javascript
+button.onclick = () => { fetch('/api/tasks') }
+```
+
+### TypeScript — JavaScript with Types
+Catches bugs before they reach users.
+```typescript
+// Without TypeScript — crashes at runtime:
+function greet(name) { return name.toUpperCase() }
+greet(123)  // 123 has no toUpperCase — runtime crash
+
+// With TypeScript — caught before running:
+function greet(name: string) { return name.toUpperCase() }
+greet(123)  // ERROR: number is not assignable to string
+```
+
+### React — Build UIs from Components
+Components are reusable UI pieces. Small components combine into large UIs.
+```tsx
+// A reusable TaskCard component
+function TaskCard({ title, status }: { title: string, status: string }) {
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <span>{status}</span>
+    </div>
+  )
+}
+
+// Use it for every task:
+tasks.map(task => <TaskCard title={task.title} status={task.status} />)
+```
+
+### Vite — Build Tool
+Converts TypeScript + JSX → plain JavaScript browsers can run. Also runs a dev server with hot reload (changes appear instantly without page refresh).
+
+### Tailwind CSS — Styling Without CSS Files
+```tsx
+// Style directly with class names — no separate CSS file needed
+<button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+  Create Task
+</button>
+```
+
+### Axios — HTTP Client
+How React calls your Spring Boot API.
+```typescript
+// Login
+const res = await axios.post('/api/auth/login', { email, password })
+const token = res.data.accessToken
+
+// Authenticated request
+const tasks = await axios.get('/api/tasks', {
+  headers: { Authorization: `Bearer ${token}` }
+})
+```
+
+### React Router — Navigation Without Page Reload
+```tsx
+<Routes>
+  <Route path="/login"        element={<LoginPage />} />
+  <Route path="/dashboard"    element={<DashboardPage />} />
+  <Route path="/projects/:id" element={<ProjectDetailPage />} />
+</Routes>
+```
+
+### React Query — Smart Data Fetching
+```typescript
+// Handles loading state, error state, caching, background refresh
+const { data: tasks, isLoading, error } = useQuery({
+  queryKey: ['tasks'],
+  queryFn: () => axios.get('/api/tasks').then(r => r.data)
+})
+```
+
+### Zustand — Global State
+```typescript
+// Stores logged-in user data accessible anywhere in the app
+const useAuthStore = create((set) => ({
+  user: null,
+  token: null,
+  login: (user, token) => set({ user, token }),
+  logout: () => set({ user: null, token: null })
+}))
+```
+
+### React Hook Form — Forms
+```tsx
+const { register, handleSubmit, formState: { errors } } = useForm()
+<input {...register('email', { required: 'Email required' })} />
+{errors.email && <p>{errors.email.message}</p>}
+```
+
+---
+
+## 6. What's DONE — Session 1
 
 ### Status: COMPLETE ✓
 
-### Files Created (24 Java files + configs + docs):
-
-**Entry Point:**
+### Files Created:
 ```
-src/main/java/com/taskflow/TaskFlowApplication.java
-  - @SpringBootApplication entry point
-  - Detailed comments on what @SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan
-```
+Entry Point:
+  TaskFlowApplication.java          — @SpringBootApplication, main()
 
-**Entity Layer:**
-```
-src/main/java/com/taskflow/entity/Role.java
-  - Enum: USER, MANAGER, ADMIN
-  - Comments on EnumType.STRING vs ORDINAL
+Entity:
+  entity/Role.java                  — Enum: USER, MANAGER, ADMIN
+  entity/User.java                  — @Entity mapping to "users" table, implements UserDetails
 
-src/main/java/com/taskflow/entity/User.java
-  - @Entity with @Table(name="users")
-  - Fields: id, fullName, email, password (BCrypt hashed), role, createdAt, updatedAt
-  - Implements UserDetails (Spring Security interface)
-  - @PrePersist / @PreUpdate lifecycle hooks
-  - Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
-  - getAuthorities() returns "ROLE_" + role.name()
-```
+Repository:
+  repository/UserRepository.java    — JpaRepository<User,Long>, findByEmail, existsByEmail
 
-**Repository Layer:**
-```
-src/main/java/com/taskflow/repository/UserRepository.java
-  - extends JpaRepository<User, Long>
-  - findByEmail(String email) → Optional<User>
-  - existsByEmail(String email) → boolean
-  - Comments on derived query methods
-```
+DTOs:
+  dto/request/RegisterRequest.java  — fullName, email, password with @NotBlank/@Email/@Size
+  dto/request/LoginRequest.java     — email, password
+  dto/response/AuthResponse.java    — accessToken, refreshToken, fullName, email, role
+  dto/response/ApiErrorResponse.java — status, error, message, timestamp, fieldErrors
 
-**DTO Layer:**
-```
-src/main/java/com/taskflow/dto/request/RegisterRequest.java
-  - fullName (@NotBlank, @Size 2-100)
-  - email (@NotBlank, @Email)
-  - password (@NotBlank, @Size min=8)
+Security:
+  security/jwt/JwtService.java      — generateAccessToken, generateRefreshToken, isTokenValid
+  security/filter/JwtAuthenticationFilter.java — reads JWT from every request
+  config/SecurityConfig.java        — filter chain, public vs protected endpoints, BCrypt
 
-src/main/java/com/taskflow/dto/request/LoginRequest.java
-  - email (@NotBlank, @Email)
-  - password (@NotBlank)
+Service:
+  service/AuthService.java          — register(), login()
+  service/UserDetailsServiceImpl.java — loadUserByUsername()
 
-src/main/java/com/taskflow/dto/response/AuthResponse.java
-  - accessToken, refreshToken, fullName, email, role
-  - @JsonInclude(NON_NULL)
+Controller:
+  controller/AuthController.java    — POST /api/auth/register, POST /api/auth/login
+  controller/HealthController.java  — GET /api/health
 
-src/main/java/com/taskflow/dto/response/ApiErrorResponse.java
-  - status, error, message, timestamp, fieldErrors (Map)
+Exception:
+  exception/GlobalExceptionHandler.java    — @RestControllerAdvice, handles all errors
+  exception/ResourceNotFoundException.java — 404 exception
+  exception/DuplicateResourceException.java — 409 exception
+
+Config:
+  resources/application.yml         — PostgreSQL, JWT, server, Swagger config
+  resources/application-test.yml    — H2 for tests
+  docker-compose.yml                — PostgreSQL, Adminer, Redis
+
+Learning Guides:
+  docs/00_WHAT_ARE_ANNOTATIONS.md
+  docs/01_ANNOTATIONS_CHEATSHEET.md
+  docs/02_REQUEST_FLOW.md
+  docs/03_IMPORTS_EXPLAINED.md
 ```
 
-**Security Layer:**
-```
-src/main/java/com/taskflow/security/jwt/JwtService.java
-  - Reads jwt.secret, jwt.access-token-expiration, jwt.refresh-token-expiration from application.yml
-  - generateAccessToken(UserDetails) → token with role claim, 15 min expiry
-  - generateRefreshToken(UserDetails) → token, 7 day expiry
-  - extractUsername(token) → email from subject
-  - isTokenValid(token, userDetails) → checks username match + not expired
-  - Uses HMAC-SHA256 signing with Base64-decoded secret key
-  - Uses io.jsonwebtoken (jjwt) 0.12.6 library
-
-src/main/java/com/taskflow/security/filter/JwtAuthenticationFilter.java
-  - extends OncePerRequestFilter
-  - Checks Authorization header for "Bearer " prefix
-  - Extracts token → gets username → loads user → validates → sets SecurityContext
-  - If no token or invalid → passes through (security config decides access)
-
-src/main/java/com/taskflow/config/SecurityConfig.java
-  - @EnableWebSecurity, @EnableMethodSecurity
-  - Public endpoints: /api/auth/**, /api/health, /swagger-ui/**, /v3/api-docs/**, /h2-console/**
-  - /api/admin/** → hasRole("ADMIN")
-  - Everything else → authenticated()
-  - SessionCreationPolicy.STATELESS (no HTTP sessions)
-  - JwtAuthFilter added before UsernamePasswordAuthenticationFilter
-  - BCryptPasswordEncoder bean
-  - DaoAuthenticationProvider with our UserDetailsService
-  - Frame options sameOrigin (for H2 console)
-```
-
-**Service Layer:**
-```
-src/main/java/com/taskflow/service/AuthService.java
-  - register(RegisterRequest):
-    1. Check duplicate email → throw DuplicateResourceException
-    2. Build User with BCrypt-encoded password, role=USER
-    3. Save to DB
-    4. Generate access + refresh tokens
-    5. Return AuthResponse
-  - login(LoginRequest):
-    1. authenticationManager.authenticate() → Spring Security verifies password
-    2. Load user from DB
-    3. Generate new tokens
-    4. Return AuthResponse
-
-src/main/java/com/taskflow/service/UserDetailsServiceImpl.java
-  - Implements UserDetailsService
-  - loadUserByUsername(email) → finds User by email or throws UsernameNotFoundException
-```
-
-**Controller Layer:**
-```
-src/main/java/com/taskflow/controller/AuthController.java
-  - @RestController @RequestMapping("/api/auth")
-  - POST /api/auth/register → 201 CREATED + AuthResponse
-  - POST /api/auth/login → 200 OK + AuthResponse
-  - @Valid on request bodies, Swagger @Tag and @Operation annotations
-
-src/main/java/com/taskflow/controller/HealthController.java
-  - GET /api/health → returns Map with status, app name, timestamp
-```
-
-**Exception Handling:**
-```
-src/main/java/com/taskflow/exception/GlobalExceptionHandler.java
-  - @RestControllerAdvice
-  - Handles: MethodArgumentNotValidException (validation errors with field-level details)
-  - Handles: ResourceNotFoundException → 404
-  - Handles: DuplicateResourceException → 409
-  - Handles: BadCredentialsException → 401
-  - Handles: Exception (generic) → 500
-
-src/main/java/com/taskflow/exception/ResourceNotFoundException.java
-  - extends RuntimeException
-
-src/main/java/com/taskflow/exception/DuplicateResourceException.java
-  - extends RuntimeException
-```
-
-**Configuration Files:**
-```
-src/main/resources/application.yml
-  - spring.datasource: H2 in-memory (jdbc:h2:mem:taskflow)
-  - spring.jpa.hibernate.ddl-auto: update
-  - spring.h2.console.enabled: true
-  - jwt.secret: Base64-encoded HMAC key
-  - jwt.access-token-expiration: 900000 (15 min)
-  - jwt.refresh-token-expiration: 604800000 (7 days)
-  - springdoc.swagger-ui.path: /swagger-ui.html
-
-pom.xml
-  - Parent: spring-boot-starter-parent 3.5.0
-  - Dependencies: web, data-jpa, security, validation, lombok, h2, postgresql
-  - JWT: jjwt-api, jjwt-impl, jjwt-jackson (0.12.6)
-  - Swagger: springdoc-openapi-starter-webmvc-ui (2.8.8)
-  - Java version: 17
-
-docker-compose.yml
-  - PostgreSQL 16-alpine (port 5432, db=taskflow, user=taskflow, pass=taskflow123)
-  - Redis 7-alpine (port 6379)
-  - Health checks for both
-  - Volume: postgres-data
-```
-
-**Learning Reference Guides (non-executable):**
-```
-src/main/java/com/taskflow/learn/microservices/MicroservicesGuide.java
-src/main/java/com/taskflow/learn/kubernetes/KubernetesGuide.java
-src/main/java/com/taskflow/learn/springai/SpringAiGuide.java
-src/main/java/com/taskflow/learn/aws/AwsDeploymentGuide.java
-src/main/java/com/taskflow/learn/monitoring/MonitoringGuide.java
-```
-
-**Beginner Documentation:**
-```
-docs/00_WHAT_ARE_ANNOTATIONS.md   — What annotations are, how Spring uses them
-docs/01_ANNOTATIONS_CHEATSHEET.md — Quick reference for every annotation
-docs/02_REQUEST_FLOW.md           — Step-by-step request trace through all files
-docs/03_IMPORTS_EXPLAINED.md      — What import packages mean
-README.md                         — START HERE section + reading order
-```
-
-**API Endpoints (Session 1):**
-| Method | URL | Auth | Request Body | Response |
-|--------|-----|------|-------------|----------|
-| POST | /api/auth/register | Public | `{"fullName":"Raja","email":"raja@gmail.com","password":"secret123"}` | 201 + AuthResponse (tokens + user info) |
-| POST | /api/auth/login | Public | `{"email":"raja@gmail.com","password":"secret123"}` | 200 + AuthResponse (tokens + user info) |
-| GET | /api/health | Public | none | 200 + `{"status":"UP","application":"TaskFlow","timestamp":"..."}` |
+### Endpoints:
+| Method | URL | Auth | Request | Response |
+|---|---|---|---|---|
+| POST | /api/auth/register | Public | `{fullName, email, password}` | 201 + tokens |
+| POST | /api/auth/login | Public | `{email, password}` | 200 + tokens |
+| GET | /api/health | Public | none | `{status, application, timestamp}` |
 
 ---
 
-## 5. Session 2: Projects & Tasks CRUD
+## 7. Session 2: Projects & Tasks CRUD
 
 ### Status: NOT STARTED
 
 ### Goal
-Build the core data model — Projects contain Tasks, Users own Projects, Tasks can be assigned. Full CRUD with JPA relationships.
+Core data model — Projects contain Tasks, Users own Projects. Full CRUD with JPA relationships.
 
-### New Entities to Create
-
-**Project Entity** (`src/main/java/com/taskflow/entity/Project.java`):
+### New Enums
 ```
-Fields:
-  - id (Long, auto-generated)
-  - name (String, required, max 200)
-  - description (String, max 2000)
-  - status (ProjectStatus enum: PLANNING, ACTIVE, ON_HOLD, COMPLETED, ARCHIVED)
-  - priority (Priority enum: LOW, MEDIUM, HIGH, CRITICAL)
-  - startDate (LocalDate)
-  - targetEndDate (LocalDate)
-  - actualEndDate (LocalDate, nullable)
-  - owner (User, @ManyToOne — the user who created the project)
-  - members (Set<User>, @ManyToMany — users who are part of the project)
-  - tasks (List<Task>, @OneToMany mappedBy "project")
-  - createdAt, updatedAt (@PrePersist, @PreUpdate)
-
-Relationships:
-  - Project → User (owner): @ManyToOne @JoinColumn(name = "owner_id")
-  - Project → Users (members): @ManyToMany @JoinTable(name = "project_members")
-  - Project → Tasks: @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+entity/ProjectStatus.java  → PLANNING, ACTIVE, ON_HOLD, COMPLETED, ARCHIVED
+entity/TaskStatus.java     → TODO, IN_PROGRESS, IN_REVIEW, DONE, CANCELLED
+entity/Priority.java       → LOW, MEDIUM, HIGH, CRITICAL
 ```
 
-**Task Entity** (`src/main/java/com/taskflow/entity/Task.java`):
+### New Entity: Project
 ```
-Fields:
-  - id (Long, auto-generated)
-  - title (String, required, max 300)
-  - description (String, max 5000)
-  - status (TaskStatus enum: TODO, IN_PROGRESS, IN_REVIEW, DONE, CANCELLED)
-  - priority (Priority enum: LOW, MEDIUM, HIGH, CRITICAL)
-  - dueDate (LocalDate)
-  - estimatedHours (Integer)
-  - actualHours (Integer)
-  - project (Project, @ManyToOne)
-  - assignee (User, @ManyToOne — who is working on it)
-  - reporter (User, @ManyToOne — who created it)
-  - createdAt, updatedAt
-
-Relationships:
-  - Task → Project: @ManyToOne @JoinColumn(name = "project_id")
-  - Task → User (assignee): @ManyToOne @JoinColumn(name = "assignee_id")
-  - Task → User (reporter): @ManyToOne @JoinColumn(name = "reporter_id")
+entity/Project.java
+  Fields: id, name, description, status, priority, startDate, targetEndDate,
+          actualEndDate, owner (User @ManyToOne), members (Set<User> @ManyToMany),
+          tasks (List<Task> @OneToMany), createdAt, updatedAt
 ```
 
-**Enums to Create:**
+### New Entity: Task
 ```
-src/main/java/com/taskflow/entity/ProjectStatus.java
-  → PLANNING, ACTIVE, ON_HOLD, COMPLETED, ARCHIVED
-
-src/main/java/com/taskflow/entity/TaskStatus.java
-  → TODO, IN_PROGRESS, IN_REVIEW, DONE, CANCELLED
-
-src/main/java/com/taskflow/entity/Priority.java
-  → LOW, MEDIUM, HIGH, CRITICAL
+entity/Task.java
+  Fields: id, title, description, status, priority, dueDate, estimatedHours,
+          actualHours, project (Project @ManyToOne), assignee (User @ManyToOne),
+          reporter (User @ManyToOne), createdAt, updatedAt
 ```
 
 ### New DTOs
-
-**Project DTOs:**
 ```
-dto/request/CreateProjectRequest.java
-  - name (@NotBlank), description, priority, startDate, targetEndDate
+dto/request/CreateProjectRequest.java  — name, description, priority, startDate, targetEndDate
+dto/request/UpdateProjectRequest.java  — all optional (partial update)
+dto/response/ProjectResponse.java      — id, name, status, priority, ownerName, memberCount, taskCount
 
-dto/request/UpdateProjectRequest.java
-  - name, description, status, priority, targetEndDate (all optional for partial update)
-
-dto/response/ProjectResponse.java
-  - id, name, description, status, priority, startDate, targetEndDate, ownerName, memberCount, taskCount, createdAt
-```
-
-**Task DTOs:**
-```
-dto/request/CreateTaskRequest.java
-  - title (@NotBlank), description, priority, dueDate, estimatedHours, assigneeId, projectId (@NotNull)
-
-dto/request/UpdateTaskRequest.java
-  - title, description, status, priority, dueDate, estimatedHours, assigneeId (all optional)
-
-dto/response/TaskResponse.java
-  - id, title, description, status, priority, dueDate, estimatedHours, actualHours, assigneeName, reporterName, projectName, createdAt, updatedAt
+dto/request/CreateTaskRequest.java     — title, description, priority, dueDate, projectId, assigneeId
+dto/request/UpdateTaskRequest.java     — all optional
+dto/response/TaskResponse.java         — id, title, status, priority, assigneeName, projectName
 ```
 
 ### New Repositories
 ```
 repository/ProjectRepository.java
-  - extends JpaRepository<Project, Long>
-  - findByOwner(User owner) → List<Project>
-  - findByMembersContaining(User member) → List<Project>
-  - findByStatus(ProjectStatus status) → List<Project>
+  - findByOwner(User)
+  - findByMembersContaining(User)
+  - findByStatus(ProjectStatus)
 
 repository/TaskRepository.java
-  - extends JpaRepository<Task, Long>
-  - findByProject(Project project) → List<Task>
-  - findByAssignee(User assignee) → List<Task>
-  - findByProjectAndStatus(Project project, TaskStatus status) → List<Task>
-  - countByProjectAndStatus(Project project, TaskStatus status) → Long
+  - findByProject(Project)
+  - findByAssignee(User)
+  - findByProjectAndStatus(Project, TaskStatus)
+  - countByProjectAndStatus(Project, TaskStatus)
 ```
 
-### New Services
+### New Services + Controllers
 ```
-service/ProjectService.java
-  - createProject(CreateProjectRequest, User currentUser) → ProjectResponse
-  - getProjectById(Long id) → ProjectResponse
-  - getMyProjects(User currentUser) → List<ProjectResponse>
-  - updateProject(Long id, UpdateProjectRequest, User currentUser) → ProjectResponse
-  - deleteProject(Long id, User currentUser) → void
-  - addMember(Long projectId, Long userId) → ProjectResponse
-  - removeMember(Long projectId, Long userId) → ProjectResponse
+service/ProjectService.java    → CRUD + addMember, removeMember
+service/TaskService.java       → CRUD + getMyTasks, getByProject
 
-service/TaskService.java
-  - createTask(CreateTaskRequest, User currentUser) → TaskResponse
-  - getTaskById(Long id) → TaskResponse
-  - getTasksByProject(Long projectId) → List<TaskResponse>
-  - getMyTasks(User currentUser) → List<TaskResponse>
-  - updateTask(Long id, UpdateTaskRequest, User currentUser) → TaskResponse
-  - deleteTask(Long id, User currentUser) → void
-```
-
-### New Controllers
-```
 controller/ProjectController.java
-  - POST   /api/projects         → createProject
-  - GET    /api/projects         → getMyProjects (current user's projects)
-  - GET    /api/projects/{id}    → getProjectById
-  - PUT    /api/projects/{id}    → updateProject
-  - DELETE /api/projects/{id}    → deleteProject
-  - POST   /api/projects/{id}/members/{userId}   → addMember
-  - DELETE /api/projects/{id}/members/{userId}   → removeMember
+  POST   /api/projects
+  GET    /api/projects
+  GET    /api/projects/{id}
+  PUT    /api/projects/{id}
+  DELETE /api/projects/{id}
+  POST   /api/projects/{id}/members/{userId}
+  DELETE /api/projects/{id}/members/{userId}
 
 controller/TaskController.java
-  - POST   /api/tasks              → createTask
-  - GET    /api/tasks              → getMyTasks (assigned to current user)
-  - GET    /api/tasks/{id}         → getTaskById
-  - GET    /api/projects/{id}/tasks → getTasksByProject
-  - PUT    /api/tasks/{id}         → updateTask
-  - DELETE /api/tasks/{id}         → deleteTask
+  POST   /api/tasks
+  GET    /api/tasks
+  GET    /api/tasks/{id}
+  GET    /api/projects/{id}/tasks
+  PUT    /api/tasks/{id}
+  DELETE /api/tasks/{id}
 ```
 
-### Key Concepts to Explain in Comments
-- @ManyToOne, @OneToMany, @ManyToMany relationships
-- Cascade types (CascadeType.ALL, MERGE, PERSIST)
-- FetchType.LAZY vs EAGER (and why LAZY is default)
-- @JoinColumn, @JoinTable — how join tables work
-- DTO ↔ Entity mapping (manual or MapStruct)
-- Getting current user from SecurityContextHolder
-- @AuthenticationPrincipal annotation
-- Why we return DTOs not entities (security, circular refs)
-- Builder pattern for responses
+### Key Concepts to Teach
+- @ManyToOne, @OneToMany, @ManyToMany
+- Cascade types (ALL, MERGE, PERSIST)
+- FetchType.LAZY vs EAGER (N+1 problem intro)
+- @JoinColumn, @JoinTable
+- @AuthenticationPrincipal — get logged-in user in controller
+- Builder pattern for DTOs
 
-### Database Tables Created
+---
+
+## 8. Session 3: Workflow + Filtering + Pagination
+
+### Status: NOT STARTED
+
+### Features
+1. Task state machine (valid transitions with InvalidStateTransitionException)
+2. JPA Specifications (dynamic filtering — status, priority, keyword, assignee)
+3. Pagination (Pageable, Page<T>, sort)
+4. Search endpoint: `GET /api/tasks/search?status=IN_PROGRESS&priority=HIGH&page=0&size=20`
+
+### New Files
 ```
-users (already exists from Session 1)
-projects (new)
-tasks (new)
-project_members (join table for @ManyToMany)
+specification/TaskSpecification.java
+specification/ProjectSpecification.java
+dto/response/PagedResponse.java  — content, page, size, totalElements, totalPages
+exception/InvalidStateTransitionException.java
 ```
 
 ---
 
-## 6. Session 3: Workflow + Filtering + Pagination
+## 9. Session 4: AOP + Events + Scheduling
 
 ### Status: NOT STARTED
 
-### Goal
-Add task state machine (valid transitions), dynamic filtering/search, and pagination to handle large datasets.
+### Features
 
-### Features to Build
-
-**1. Task Status Transitions (State Machine):**
+**AOP — Audit Logging:**
 ```
-Valid transitions:
-  TODO → IN_PROGRESS
-  IN_PROGRESS → IN_REVIEW, TODO (move back)
-  IN_REVIEW → DONE, IN_PROGRESS (needs changes)
-  DONE → (terminal state, no transition)
-  Any → CANCELLED
-
-Invalid transitions throw InvalidStateTransitionException
-
-Implementation:
-  - Add canTransitionTo(TaskStatus target) method to TaskStatus enum
-  - Service validates transition before updating
+aspect/AuditLogAspect.java         — @Around all service methods, logs who/what/when/duration
+entity/AuditLog.java               — saved to DB: action, entityType, userId, timestamp, duration
+annotation/Auditable.java          — custom @Auditable annotation
 ```
 
-**2. Spring Data JPA Specifications (Dynamic Filtering):**
+**Spring Events:**
 ```
-Create: specification/TaskSpecification.java
-  - Filter by: status, priority, assigneeId, projectId, keyword search (title/description)
-  - Uses Criteria API under the hood
-  - Composable: can combine multiple filters
+event/TaskCreatedEvent.java
+event/TaskAssignedEvent.java
+event/TaskStatusChangedEvent.java
+event/ProjectCreatedEvent.java
 
-Create: specification/ProjectSpecification.java
-  - Filter by: status, priority, ownerId, keyword
-```
-
-**3. Pagination & Sorting:**
-```
-Update controllers to accept:
-  - ?page=0&size=20&sort=createdAt,desc
-  - Return Page<TaskResponse> with metadata (totalElements, totalPages, currentPage)
-
-Update DTOs:
-  dto/response/PagedResponse.java
-    - content (List<T>), page, size, totalElements, totalPages, isLast
+listener/NotificationListener.java — @EventListener, creates Notification entities
+entity/Notification.java           — id, userId, message, type, read, createdAt
+service/NotificationService.java
+controller/NotificationController.java
+  GET /api/notifications
+  PUT /api/notifications/{id}/read
 ```
 
-**4. Search Endpoint:**
+**Scheduling:**
 ```
-GET /api/tasks/search?status=IN_PROGRESS&priority=HIGH&assigneeId=1&keyword=login&page=0&size=20
+scheduler/TaskReminderScheduler.java  — @Scheduled cron, daily 9AM reminders
+scheduler/OverdueTaskScheduler.java   — finds overdue tasks, creates notifications
 ```
-
-### Key Concepts to Explain
-- JPA Specifications (Criteria API)
-- Pageable, Page, Sort
-- Dynamic query building
-- State machine pattern
-- Query optimization basics
 
 ---
 
-## 7. Session 4: AOP + Events + Scheduling
+## 10. Session 5: Razorpay Payment Integration
 
 ### Status: NOT STARTED
 
-### Goal
-Cross-cutting concerns: automatic audit logging, event-driven notifications, scheduled tasks.
-
-### Features to Build
-
-**1. AOP — Audit Logging:**
+### Features
 ```
-Create: aspect/AuditLogAspect.java
-  - @Around annotation on all service methods
-  - Logs: who called what, when, how long it took
-  - Uses @Slf4j for logging
-
-Create: entity/AuditLog.java
-  - id, action, entityType, entityId, userId, timestamp, duration, details
-  - Saved to database for audit trail
-
-Create: annotation/Auditable.java
-  - Custom annotation @Auditable to mark methods that should be audited
+config/RazorpayConfig.java
+entity/Payment.java, entity/SubscriptionPlan.java
+service/PaymentService.java  — createOrder, verifyPayment (HMAC), handleWebhook
+controller/PaymentController.java
+  POST /api/payments/create-order
+  POST /api/payments/verify
+  POST /api/webhooks/razorpay
+  GET  /api/payments/history
 ```
-
-**2. Spring Events:**
-```
-Create: event/TaskCreatedEvent.java
-Create: event/TaskAssignedEvent.java
-Create: event/TaskStatusChangedEvent.java
-Create: event/ProjectCreatedEvent.java
-
-Create: listener/NotificationListener.java
-  - @EventListener methods
-  - Listens for task events
-  - Creates in-app notifications (Notification entity)
-
-Create: entity/Notification.java
-  - id, userId, message, type, read, createdAt
-
-Create: service/NotificationService.java
-  - getNotifications(userId) → List<NotificationResponse>
-  - markAsRead(notificationId) → void
-
-Create: controller/NotificationController.java
-  - GET /api/notifications → get my notifications
-  - PUT /api/notifications/{id}/read → mark as read
-```
-
-**3. Scheduling:**
-```
-Create: scheduler/TaskReminderScheduler.java
-  - @Scheduled(cron = "0 0 9 * * *") → daily at 9 AM
-  - Finds tasks due tomorrow, creates reminder notifications
-
-Create: scheduler/OverdueTaskScheduler.java
-  - Finds overdue tasks, auto-updates status
-  - Creates notifications for assignees
-
-Add @EnableScheduling to main application class
-```
-
-**4. Spring Retry:**
-```
-Add spring-retry dependency to pom.xml
-Create examples showing @Retryable on service methods
-```
-
-### Key Concepts to Explain
-- AOP: Aspect, Pointcut, JoinPoint, Advice types (@Before, @After, @Around)
-- Spring Events: ApplicationEventPublisher, @EventListener, @Async events
-- @Scheduled: cron expressions, fixedRate, fixedDelay
-- @Async: async method execution, thread pools
-- Custom annotations: how to create and process them
-- Observer pattern (events)
 
 ---
 
-## 8. Session 5: Razorpay Payment Integration
+## 11. Session 6: Redis Caching + Performance
 
 ### Status: NOT STARTED
 
-### Goal
-Accept payments via Razorpay (India's popular payment gateway). Build premium/subscription feature for projects.
-
-### Features to Build
-
-**1. Razorpay Setup:**
+### Features
 ```
-Add to pom.xml: com.razorpay:razorpay-java (latest version)
-
-Add to application.yml:
-  razorpay:
-    key-id: ${RAZORPAY_KEY_ID}
-    key-secret: ${RAZORPAY_KEY_SECRET}
-
-Create: config/RazorpayConfig.java
-  - @Bean RazorpayClient with key-id and key-secret
+config/RedisConfig.java
+@Cacheable("projects") on getProjectById
+@CacheEvict on update/delete
+@EntityGraph to fix N+1 queries
+HikariCP connection pool tuning (already in application.yml)
+@Index on frequently queried columns
 ```
-
-**2. Payment Entities:**
-```
-Create: entity/Payment.java
-  - id, orderId (Razorpay order ID), paymentId (Razorpay payment ID)
-  - amount, currency, status (CREATED, AUTHORIZED, CAPTURED, REFUNDED, FAILED)
-  - user (@ManyToOne), plan (subscription plan), createdAt, updatedAt
-
-Create: entity/SubscriptionPlan.java
-  - id, name, description, price, durationDays, maxProjects, maxMembers
-```
-
-**3. Payment Flow:**
-```
-Create: service/PaymentService.java
-  - createOrder(userId, planId) → creates Razorpay order, returns orderId + amount
-  - verifyPayment(orderId, paymentId, signature) → verifies HMAC signature
-  - handleWebhook(payload, signature) → processes Razorpay webhook events
-  - getPaymentHistory(userId) → List<PaymentResponse>
-
-Create: controller/PaymentController.java
-  - POST /api/payments/create-order → creates Razorpay order
-  - POST /api/payments/verify → verifies payment after checkout
-  - POST /api/webhooks/razorpay → webhook endpoint (Razorpay calls this)
-  - GET  /api/payments/history → payment history
-
-Create: DTOs:
-  - CreateOrderRequest (planId)
-  - CreateOrderResponse (orderId, amount, currency, razorpayKeyId)
-  - VerifyPaymentRequest (orderId, paymentId, signature)
-  - PaymentResponse (id, amount, status, planName, createdAt)
-```
-
-**4. Payment Verification (Security):**
-```
-Razorpay signature verification:
-  generated_signature = HMAC_SHA256(orderId + "|" + paymentId, key_secret)
-  if (generated_signature == razorpay_signature) → payment is genuine
-```
-
-### Key Concepts to Explain
-- Payment gateway flow (order → checkout → verify)
-- HMAC signature verification (why it's needed)
-- Webhooks (server-to-server callbacks)
-- Idempotency (preventing duplicate charges)
-- Payment status state machine
-- Environment variables for secrets (never hardcode API keys)
 
 ---
 
-## 9. Session 6: Redis Caching + Performance
+## 12. Session 7: Apache Kafka + Event-Driven
 
 ### Status: NOT STARTED
 
-### Goal
-Add Redis caching, fix N+1 queries, optimize database access.
-
-### Features to Build
-
-**1. Redis Caching:**
+### Features
 ```
-Add to pom.xml: spring-boot-starter-data-redis, spring-boot-starter-cache
+kafka/producer/TaskEventProducer.java
+kafka/consumer/NotificationConsumer.java
+kafka/consumer/AuditConsumer.java
+kafka/config/KafkaConfig.java  — DLQ, error handler, retry
 
-Create: config/RedisConfig.java
-  - @EnableCaching
-  - RedisCacheManager with TTL configuration
-  - JSON serialization for cache values
-
-Add caching annotations to services:
-  - @Cacheable("projects") on getProjectById → cache result
-  - @CacheEvict("projects") on updateProject → clear cache
-  - @CachePut("projects") on createProject → update cache
-  - Cache user's task list, notification count
+Topics: task-events, user-events, payment-events, notification-events
 ```
 
-**2. N+1 Query Problem Fix:**
-```
-Demonstrate the problem:
-  - Loading projects → each project lazy-loads owner → N+1 queries
-  
-Fix with:
-  - @EntityGraph on repository methods
-  - JOIN FETCH in JPQL queries
-  - @BatchSize for batch loading
-  - Projections (interface-based) for read-only queries
-```
-
-**3. Connection Pooling:**
-```
-Add to application.yml:
-  spring.datasource.hikari:
-    maximum-pool-size: 10
-    minimum-idle: 5
-    connection-timeout: 30000
-    idle-timeout: 600000
-
-Explain HikariCP configuration
-```
-
-**4. Database Indexing:**
-```
-Add @Index annotations on frequently queried columns:
-  - User.email (already unique)
-  - Task.status, Task.assignee, Task.dueDate
-  - Project.owner, Project.status
-
-Create: learn/performance/PerformanceGuide.java
-  - Explain B-Tree indexes, when to index, EXPLAIN ANALYZE
-```
-
-### Key Concepts to Explain
-- Redis: what it is, data structures, TTL, eviction policies
-- @Cacheable, @CacheEvict, @CachePut
-- N+1 problem: what causes it, how to detect, how to fix
-- @EntityGraph, JOIN FETCH, @BatchSize
-- Connection pooling: why, HikariCP
-- Database indexes: how they work, when to use
+docker-compose.yml additions: Zookeeper, Kafka broker
 
 ---
 
-## 10. Session 7: Apache Kafka + Event-Driven
+## 13. Session 8: React Frontend — Auth + Setup
 
 ### Status: NOT STARTED
 
-### Goal
-Add Kafka for event streaming. Decouple services through events.
-
-### Features to Build
-
-**1. Kafka Setup:**
-```
-Add to docker-compose.yml:
-  - Zookeeper container
-  - Kafka broker container
-  - Kafka UI (optional, for debugging)
-
-Add to pom.xml: spring-kafka
-
-Add to application.yml:
-  spring.kafka:
-    bootstrap-servers: localhost:9092
-    consumer.group-id: taskflow-group
-    consumer.auto-offset-reset: earliest
-```
-
-**2. Kafka Producers:**
-```
-Create: kafka/producer/TaskEventProducer.java
-  - publishTaskCreated(TaskEvent)
-  - publishTaskStatusChanged(TaskStatusEvent)
-  - publishTaskAssigned(TaskAssignEvent)
-  
-Create: kafka/event/TaskEvent.java (serializable event payload)
-Create: kafka/event/TaskStatusEvent.java
-Create: kafka/event/TaskAssignEvent.java
-```
-
-**3. Kafka Consumers:**
-```
-Create: kafka/consumer/NotificationConsumer.java
-  - @KafkaListener(topics = "task-events")
-  - Processes events → creates notifications
-
-Create: kafka/consumer/AuditConsumer.java
-  - @KafkaListener(topics = "audit-events")
-  - Processes events → saves audit logs
-
-Create: kafka/consumer/AnalyticsConsumer.java
-  - Processes events → updates project statistics
-```
-
-**4. Topics:**
-```
-task-events: task created, updated, deleted, status changed
-user-events: user registered, profile updated
-payment-events: payment created, completed, failed
-notification-events: notification triggers
-```
-
-**5. Dead Letter Queue:**
-```
-Configure DLQ for failed message processing
-Create: kafka/config/KafkaConfig.java
-  - Error handler with retry + DLQ
-```
-
-### Key Concepts to Explain
-- What Kafka is vs RabbitMQ vs SQS
-- Topics, Partitions, Consumer Groups, Offsets
-- At-least-once vs at-most-once vs exactly-once delivery
-- Serialization (JSON with Jackson)
-- Dead Letter Queue pattern
-- Event sourcing basics
-
----
-
-## 11. Session 8: React Frontend — Auth + Setup
-
-### Status: NOT STARTED
-
-### Goal
-Set up React project from scratch with TypeScript, build authentication pages.
-
-### Project Setup
+### Setup Commands
 ```bash
-# Create React project in /frontend directory
 npm create vite@latest frontend -- --template react-ts
 cd frontend
 npm install
-npm install react-router-dom axios tailwindcss @headlessui/react
+npm install react-router-dom axios
 npm install @tanstack/react-query zustand react-hook-form
-npm install @heroicons/react recharts
-npx tailwindcss init -p
+npm install @heroicons/react recharts framer-motion
+npm install tailwindcss @tailwindcss/vite
 ```
 
-### File Structure to Create
+### Files to Create
 ```
-frontend/
-  src/
-    main.tsx                    # Entry point
-    App.tsx                     # Router setup
-    
-    pages/
-      LoginPage.tsx             # Login form
-      RegisterPage.tsx          # Registration form
-      DashboardPage.tsx         # Main dashboard (placeholder for Session 9)
-      NotFoundPage.tsx          # 404 page
-    
-    components/
-      layout/
-        Navbar.tsx              # Top navigation bar
-        Sidebar.tsx             # Side navigation
-        Layout.tsx              # Main layout wrapper
-      auth/
-        LoginForm.tsx           # Login form component
-        RegisterForm.tsx        # Register form component
-        ProtectedRoute.tsx      # Route guard (redirect if not logged in)
-      common/
-        Button.tsx              # Reusable button
-        Input.tsx               # Reusable input field
-        Loading.tsx             # Loading spinner
-        Toast.tsx               # Notification toast
-    
-    services/
-      api.ts                    # Axios instance with base URL + interceptors
-      authService.ts            # login(), register(), logout(), refreshToken()
-    
-    stores/
-      authStore.ts              # Zustand store: user, token, isAuthenticated
-    
-    types/
-      auth.ts                   # TypeScript interfaces: LoginRequest, RegisterRequest, AuthResponse
-      api.ts                    # ApiError interface
-    
-    hooks/
-      useAuth.ts                # Custom hook for auth operations
-    
-    utils/
-      tokenUtils.ts             # Save/get/remove token from localStorage
-    
-    styles/
-      index.css                 # Tailwind imports + global styles
+frontend/src/
+  main.tsx                        — entry point
+  App.tsx                         — router setup
+
+  pages/
+    LoginPage.tsx                 — login form
+    RegisterPage.tsx              — register form
+    DashboardPage.tsx             — placeholder
+
+  components/
+    auth/
+      LoginForm.tsx
+      RegisterForm.tsx
+      ProtectedRoute.tsx          — redirect to /login if not authenticated
+    common/
+      Button.tsx                  — reusable button
+      Input.tsx                   — reusable input
+      Loading.tsx                 — spinner
+      Toast.tsx                   — success/error notifications
+
+  services/
+    api.ts                        — Axios instance with interceptors (auto-attach token)
+    authService.ts                — login(), register(), logout()
+
+  stores/
+    authStore.ts                  — Zustand: user, token, isAuthenticated
+
+  types/
+    auth.ts                       — TypeScript interfaces: LoginRequest, AuthResponse
+    api.ts                        — ApiError interface
+
+  hooks/
+    useAuth.ts                    — custom hook wrapping auth operations
+
+  utils/
+    tokenUtils.ts                 — save/get/remove token from localStorage
 ```
 
-### Key Features
-- Login page with email/password form
-- Register page with name/email/password form
-- JWT token storage in localStorage
-- Axios interceptor: auto-attach token to every API request
-- Axios interceptor: auto-refresh token on 401 response
-- Protected routes: redirect to /login if not authenticated
-- Toast notifications for success/error messages
-- Responsive design (mobile + desktop)
-
-### Key Concepts to Explain (detailed comments in every file)
-- What React IS (component-based UI library)
-- JSX: HTML inside JavaScript
-- Components: function that returns JSX
-- Props: passing data to components
-- useState: local state in a component
-- useEffect: side effects (API calls on page load)
-- TypeScript: why types matter, interfaces
-- React Router: how SPA routing works
-- Axios: HTTP client, interceptors
-- JWT flow on frontend: login → store token → send with requests → refresh on expiry
-- Zustand: simple global state (simpler than Redux)
-- Tailwind CSS: utility-first classes
+### Key Frontend Concepts to Teach
+- JSX: HTML inside JavaScript/TypeScript
+- useState: local component state
+- useEffect: run code after render (API calls)
+- Props: passing data to child components
+- TypeScript interfaces for API response types
+- Axios interceptors: auto-attach JWT to every request
+- React Router: how SPA routing works without page reload
+- Zustand: global state simpler than Redux
+- Protected routes: redirect unauthenticated users
 
 ---
 
-## 12. Session 9: React Frontend — Dashboard + Tasks
+## 14. Session 9: React Frontend — Dashboard + Tasks
 
 ### Status: NOT STARTED
 
-### Goal
-Build the main application UI — dashboard, project management, task management with Kanban board.
-
-### Pages to Build
+### Pages
 ```
 pages/
-  DashboardPage.tsx         # Stats cards, recent activity, charts
-  ProjectsPage.tsx          # List all projects, create new
-  ProjectDetailPage.tsx     # Single project view, members, tasks
-  TasksPage.tsx             # All tasks view (table + filters)
-  KanbanPage.tsx            # Drag-and-drop Kanban board
-  ProfilePage.tsx           # User profile, settings
-  NotificationsPage.tsx     # All notifications
-  PaymentPage.tsx           # Subscription plans, pay with Razorpay
+  DashboardPage.tsx       — stats cards, activity feed, charts
+  ProjectsPage.tsx        — list + create projects
+  ProjectDetailPage.tsx   — single project: members, task list
+  TasksPage.tsx           — table view with filters
+  KanbanPage.tsx          — drag-and-drop Kanban board
+  ProfilePage.tsx         — user settings
+  NotificationsPage.tsx   — notification list
+  PaymentPage.tsx         — subscription plans + Razorpay checkout
 ```
 
-### Components to Build
+### Components
 ```
 components/
   dashboard/
-    StatsCard.tsx           # Shows count (total projects, tasks, etc.)
-    RecentActivity.tsx      # Activity feed
-    ProjectChart.tsx        # Pie/bar chart using Recharts
-    
+    StatsCard.tsx           — "12 tasks" summary box
+    RecentActivity.tsx      — activity feed
+    ProjectChart.tsx        — pie/bar chart (Recharts)
   projects/
-    ProjectCard.tsx         # Project summary card
-    ProjectForm.tsx         # Create/edit project form
-    ProjectMemberList.tsx   # Member management
-    
+    ProjectCard.tsx
+    ProjectForm.tsx
+    ProjectMemberList.tsx
   tasks/
-    TaskCard.tsx            # Task summary card
-    TaskForm.tsx            # Create/edit task form (modal)
-    TaskTable.tsx           # Table view with sorting/filtering
-    TaskFilters.tsx         # Filter bar (status, priority, assignee)
-    KanbanBoard.tsx         # Drag-and-drop columns
-    KanbanColumn.tsx        # Single column (TODO, IN_PROGRESS, etc.)
-    
+    TaskCard.tsx
+    TaskForm.tsx            — create/edit modal
+    TaskTable.tsx           — sortable/filterable table
+    TaskFilters.tsx         — status/priority filter bar
+    KanbanBoard.tsx         — dnd-kit drag-and-drop board
+    KanbanColumn.tsx        — single column (TODO, IN_PROGRESS...)
   payments/
-    PlanCard.tsx            # Subscription plan card
-    RazorpayCheckout.tsx    # Razorpay payment button
+    PlanCard.tsx
+    RazorpayCheckout.tsx
 ```
 
-### Key Features
-- Dashboard with project/task stats (Recharts)
-- CRUD for projects (create, view, edit, delete)
-- CRUD for tasks with modal forms
-- Kanban board with drag-and-drop (react-beautiful-dnd or dnd-kit)
-- Table view with pagination, sorting, filtering
-- Real-time notification badge
-- Razorpay checkout integration (frontend)
-- Dark mode toggle
-- Responsive design
-
-### Key Concepts to Explain
-- React Query (TanStack): caching, refetching, optimistic updates
-- React Hook Form: controlled forms, validation
-- Component composition: small reusable pieces
-- Custom hooks: extract reusable logic
-- Recharts: data visualization
-- Drag and drop: HTML5 drag events
-- Razorpay frontend SDK: loading script, opening checkout
+### Dark Mode
+Every component supports dark/light mode via Tailwind `dark:` classes.
+User preference stored in localStorage.
 
 ---
 
-## 13. Session 10: Docker + Testing + Deployment
+## 15. Session 10: Docker + Testing + Deployment
 
 ### Status: NOT STARTED
 
-### Goal
-Containerize everything, write tests, set up CI/CD, final polish.
-
-### Docker Setup
+### Backend Tests
 ```
-Dockerfile (backend — multi-stage build):
-  Stage 1: Build with Maven
-  Stage 2: Run with JRE only (smaller image)
+test/java/com/taskflow/
+  service/AuthServiceTest.java          — @ExtendWith(MockitoExtension), mock all deps
+  service/ProjectServiceTest.java
+  controller/AuthControllerTest.java    — @WebMvcTest (test controller only)
+  repository/UserRepositoryTest.java    — @DataJpaTest (H2)
+  security/JwtServiceTest.java
+  integration/AuthIntegrationTest.java  — @SpringBootTest (full stack)
+```
 
-frontend/Dockerfile:
+Test profile uses `application-test.yml` (H2) automatically.
+
+### Frontend Tests
+```
+frontend/src/__tests__/
+  LoginForm.test.tsx      — renders, validates, submits
+  TaskCard.test.tsx       — renders correctly
+  authStore.test.ts       — state management tests
+```
+
+### Docker Multi-Stage Build
+```
+Dockerfile (backend)
+  Stage 1: Build with Maven (full JDK)
+  Stage 2: Run with JRE only (smaller image — ~200MB vs ~600MB)
+
+frontend/Dockerfile
   Stage 1: Build with Node
   Stage 2: Serve with Nginx
-
-docker-compose.yml (updated, full stack):
-  - taskflow-backend (Spring Boot)
-  - taskflow-frontend (React + Nginx)
-  - postgres (database)
-  - redis (cache)
-  - kafka + zookeeper (messaging)
-  - All connected via Docker network
 ```
 
-### Testing
+### GitHub Actions CI/CD
 ```
-Backend Tests:
-  test/java/com/taskflow/
-    service/AuthServiceTest.java        # Unit test with Mockito
-    service/ProjectServiceTest.java     # Unit test
-    service/TaskServiceTest.java        # Unit test
-    controller/AuthControllerTest.java  # @WebMvcTest
-    controller/ProjectControllerTest.java
-    repository/UserRepositoryTest.java  # @DataJpaTest
-    security/JwtServiceTest.java        # Unit test
-    integration/AuthIntegrationTest.java # @SpringBootTest (full flow)
-
-What to test:
-  - Register: success, duplicate email, invalid input
-  - Login: success, wrong password, non-existent user
-  - CRUD: create, read, update, delete for projects and tasks
-  - Security: unauthenticated access blocked, role-based access
-  - JWT: token generation, validation, expiry
-```
-
-### CI/CD (GitHub Actions)
-```
-.github/workflows/ci.yml:
-  - Trigger: push to main, pull requests
-  - Steps:
-    1. Checkout code
-    2. Set up Java 17
-    3. Run: mvn test
-    4. Run: mvn verify (integration tests)
-    5. Build Docker image
-    6. Push to Docker Hub (optional)
-  
-  - Frontend:
-    1. Set up Node 18
-    2. npm install && npm run build
-    3. npm test
+.github/workflows/ci.yml
+  Triggers: push to main, all PRs
+  Steps: checkout → Java 17 → mvn test → mvn package → build Docker image
+  Frontend: Node 18 → npm ci → npm run build → npm test
 ```
 
 ### Postman Collection
 ```
-Create: postman/TaskFlow.postman_collection.json
-  - Organized by feature: Auth, Projects, Tasks, Payments
-  - Auto-set JWT token from login response
-  - Example request/response for every endpoint
+postman/TaskFlow.postman_collection.json
+  — auto-set JWT from login response
+  — organized: Auth / Projects / Tasks / Payments
 ```
 
-### Final Polish
-- README update with full API docs
-- Swagger annotations on all endpoints
-- Error messages cleanup
-- Code comment review (ensure every file has WHY + interview Q&A)
-- Application profiles: dev, test, prod
-- Flyway migration scripts (from Hibernate ddl-auto to proper migrations)
-
-### Key Concepts to Explain
-- Docker: images, containers, Dockerfile, layers, caching
-- Docker Compose: multi-container orchestration
-- Multi-stage builds: why (smaller production images)
-- JUnit 5: @Test, @BeforeEach, assertions
-- Mockito: @Mock, @InjectMocks, when().thenReturn()
-- @WebMvcTest: test controller without full app
-- @DataJpaTest: test repository with embedded DB
-- @SpringBootTest: full integration test
-- GitHub Actions: CI/CD workflow syntax
-- Code coverage: JaCoCo
+### Flyway Migrations (replace ddl-auto: update)
+```
+resources/db/migration/
+  V1__create_users_table.sql
+  V2__create_projects_tasks_tables.sql
+  V3__add_notifications_table.sql
+```
 
 ---
 
-## 14. Learning Folders (Reference Guides)
+## 16. Session 11: Spring AI Integration
 
-These are **non-executable reference files** already created in Session 1. They explain advanced topics that Raja can read now and implement later:
+### Status: NOT STARTED
 
-| File | Topics Covered |
-|------|---------------|
-| `learn/microservices/MicroservicesGuide.java` | API Gateway, Eureka, OpenFeign, Circuit Breaker, Config Server, Distributed Tracing, when to split monolith |
-| `learn/kubernetes/KubernetesGuide.java` | Pod, Deployment, Service, ConfigMap, Secret, Ingress, HPA, kubectl commands, deployment strategies |
-| `learn/springai/SpringAiGuide.java` | ChatClient, Prompt Templates, RAG, Embeddings, Function Calling, LLM integration |
-| `learn/aws/AwsDeploymentGuide.java` | EC2, RDS, S3, ECS, ElastiCache, Route 53, ALB, deployment options, cost optimization |
-| `learn/monitoring/MonitoringGuide.java` | Prometheus, Grafana, ELK Stack, Loki, Actuator, custom metrics, logging best practices |
+### What is Spring AI?
+Spring AI is Spring's framework for integrating AI models (Claude, GPT-4, Gemini) into Spring Boot apps. It provides a unified API regardless of which AI provider you use.
 
-**Future learning folders to add** (can be added in any session):
-- `learn/performance/PerformanceGuide.java` — N+1, indexing, query optimization, connection pooling
-- `learn/testing/TestingGuide.java` — Testing pyramid, TDD, BDD, test strategies
-- `learn/designpatterns/DesignPatternsGuide.java` — All patterns used in project
+### Setup
+```xml
+<!-- pom.xml -->
+<dependency>
+  <groupId>org.springframework.ai</groupId>
+  <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
+</dependency>
+```
+
+```yaml
+# application.yml
+spring:
+  ai:
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY}
+      chat:
+        options:
+          model: claude-sonnet-4-6
+```
+
+### Features to Build
+
+**Feature 1 — Smart Project Summary**
+```
+GET /api/projects/{id}/ai-summary
+→ Reads all tasks in the project
+→ Sends to AI: "Summarize this project's status and highlight blockers"
+→ Returns: "Project has 20 tasks. 8 are overdue. Backend API is most blocked area."
+```
+
+**Feature 2 — AI Task Description Generator**
+```
+POST /api/tasks/ai-generate-description
+Body: { "title": "Fix login bug with special characters" }
+→ AI generates a full, professional task description
+→ Returns structured description with acceptance criteria
+```
+
+**Feature 3 — Natural Language Task Search**
+```
+GET /api/tasks/ai-search?q=things blocking the frontend team
+→ AI understands intent → searches tasks semantically
+→ Returns relevant tasks even if exact words don't match
+```
+
+### Files to Create
+```
+service/AiService.java            — Spring AI ChatClient wrapper
+controller/AiController.java
+  GET  /api/projects/{id}/ai-summary
+  POST /api/tasks/ai-generate-description
+  GET  /api/tasks/ai-search
+
+dto/request/AiGenerateRequest.java
+dto/response/AiSummaryResponse.java
+```
+
+### Key Concepts to Teach
+- What an LLM is and how it works
+- Spring AI ChatClient
+- Prompt templates
+- System prompts vs user prompts
+- Token limits and costs
+- When to use AI vs regular search
 
 ---
 
-## 15. Coding Conventions
+## 17. Session 12: WebSockets — Real-Time Features
 
-Follow these conventions across ALL sessions:
+### Status: NOT STARTED
 
-### File Structure
+### What are WebSockets?
+Normal HTTP: Client asks → Server answers (one direction per request).
+WebSocket: Permanent two-way connection. Server can push data to client anytime.
+
+### Setup
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-websocket</artifactId>
+</dependency>
 ```
-Every Java file follows this pattern:
+
+### Features to Build
+
+**Feature 1 — Live Notifications**
+```
+Raja assigns task to Priya
+→ Server pushes notification to Priya's browser INSTANTLY
+→ Notification badge updates without page refresh
+```
+
+**Feature 2 — Live Kanban Board**
+```
+Raja moves task from TODO → IN_PROGRESS on Kanban
+→ All team members viewing that project see it move in real-time
+→ Like Google Docs — collaborative live updates
+```
+
+### Files to Create
+```
+config/WebSocketConfig.java       — STOMP endpoint, message broker
+controller/WebSocketController.java — @MessageMapping handlers
+service/NotificationPushService.java — sends to specific users
+
+frontend:
+  hooks/useWebSocket.ts           — connect, subscribe, receive messages
+  (updates notification badge and Kanban in real-time)
+```
+
+---
+
+## 18. Session 13: OAuth2 Social Login
+
+### Status: NOT STARTED
+
+### What is OAuth2?
+"Login with Google" — instead of your app managing passwords, you delegate authentication to Google.
+
+Flow:
+```
+1. User clicks "Login with Google"
+2. Redirected to Google's login page
+3. User approves — Google sends a "code" to your backend
+4. Backend exchanges code for user's Google profile (name, email)
+5. Backend creates/finds user in your DB
+6. Backend generates your JWT and returns it
+7. Same JWT flow from this point
+```
+
+### Setup
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+```
+
+```yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, profile, email
+```
+
+### Files to Create
+```
+security/oauth2/OAuth2SuccessHandler.java  — on success, generate JWT, redirect
+security/oauth2/OAuth2UserService.java     — extract user info from Google response
+```
+
+Frontend addition:
+```
+"Login with Google" button on LoginPage
+```
+
+---
+
+## 19. Session 14: Rate Limiting + Email + File Upload
+
+### Status: NOT STARTED
+
+### Rate Limiting (Bucket4j)
+Prevent brute-force attacks and API abuse.
+```xml
+<dependency>
+  <groupId>com.github.vladimir-bukhtoyarov</groupId>
+  <artifactId>bucket4j-core</artifactId>
+</dependency>
+```
+
+Rules:
+```
+/api/auth/login     → max 5 attempts per minute per IP
+/api/auth/register  → max 3 per hour per IP
+All endpoints       → max 100 per minute per user
+Response: HTTP 429 Too Many Requests
+```
+
+```
+config/RateLimitConfig.java
+filter/RateLimitFilter.java
+```
+
+### Email Notifications (JavaMailSender)
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+Emails to send:
+```
+1. Welcome email after registration
+2. "Task assigned to you: [title]" notification
+3. "Task due tomorrow: [title]" daily reminder (via @Scheduled)
+4. "You've been added to project: [name]"
+```
+
+```
+service/EmailService.java
+templates/email/
+  welcome.html         — Thymeleaf HTML template
+  task-assigned.html
+  task-reminder.html
+```
+
+Use Mailtrap.io (free fake inbox for testing — no real emails sent).
+
+### File Upload (AWS S3)
+```xml
+<dependency>
+  <groupId>software.amazon.awssdk</groupId>
+  <artifactId>s3</artifactId>
+</dependency>
+```
+
+Feature: Task attachments (PDF, images, docs)
+```
+entity/TaskAttachment.java         — id, taskId, fileName, s3Url, fileSize, uploadedBy
+service/FileStorageService.java    — upload to S3, generate pre-signed URL
+controller/FileController.java
+  POST   /api/tasks/{id}/attachments  → upload
+  GET    /api/tasks/{id}/attachments  → list
+  DELETE /api/tasks/{id}/attachments/{fileId}
+```
+
+---
+
+## 20. Session 15: Observability — Prometheus + Grafana
+
+### Status: NOT STARTED
+
+### What is Observability?
+Knowing what your app is doing in real-time — how fast, how many errors, resource usage.
+
+Three pillars:
+- **Metrics** — numbers over time (requests/sec, error rate, DB query time)
+- **Logs** — what happened (structured JSON logs)
+- **Tracing** — follow one request across all services
+
+### Setup
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+```
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+```
+
+docker-compose.yml additions:
+```yaml
+prometheus:
+  image: prom/prometheus
+  ports: ["9090:9090"]
+  volumes: ["./prometheus.yml:/etc/prometheus/prometheus.yml"]
+
+grafana:
+  image: grafana/grafana
+  ports: ["3001:3000"]
+```
+
+### Grafana Dashboard Shows:
+```
+- HTTP requests per second (by endpoint)
+- Average response time (p50, p95, p99)
+- Error rate (4xx and 5xx)
+- JVM memory usage (heap, non-heap)
+- Active database connections (HikariCP pool)
+- Garbage collection stats
+- Kafka consumer lag (Session 7+)
+- Cache hit rate (Redis, Session 6+)
+```
+
+---
+
+## 21. Session 16: Frontend Add-ons
+
+### Status: NOT STARTED
+
+### Dark Mode
+```typescript
+// tailwind.config.ts — enable class-based dark mode
+darkMode: 'class'
+
+// Toggle component
+const toggleDark = () => {
+  document.documentElement.classList.toggle('dark')
+  localStorage.setItem('theme', isDark ? 'light' : 'dark')
+}
+
+// Every component uses dark: prefix:
+<div className="bg-white dark:bg-gray-900 text-black dark:text-white">
+```
+
+### Framer Motion — Animations
+```tsx
+import { motion } from 'framer-motion'
+
+// Tasks animate in when created
+<motion.div
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0 }}
+>
+  <TaskCard {...task} />
+</motion.div>
+
+// Page transitions
+// Notification badge bounce
+// Kanban drag animations
+```
+
+### Progressive Web App (PWA)
+Makes the web app installable on phones and work offline.
+```
+public/manifest.json          — app name, icons, colors
+public/sw.js                  — service worker (offline caching)
+vite.config.ts                — vite-plugin-pwa configuration
+```
+
+Users can: install on home screen, get push notifications, view tasks offline.
+
+### React Testing Library + Vitest
+```typescript
+// frontend/src/__tests__/LoginForm.test.tsx
+import { render, screen, fireEvent } from '@testing-library/react'
+
+test('shows error when email is empty', async () => {
+  render(<LoginForm />)
+  fireEvent.click(screen.getByText('Login'))
+  expect(await screen.findByText('Email required')).toBeInTheDocument()
+})
+```
+
+### Storybook — Component Documentation
+```bash
+npx storybook@latest init
+```
+Showcases every UI component in isolation — great for portfolio.
+
+---
+
+## 22. Session 17: Elasticsearch
+
+### Status: NOT STARTED
+
+### What is Elasticsearch?
+A search engine optimized for full-text search. Finds `"login authentication issue"` even if the task title says `"Auth bug on signin page"` — it understands language.
+
+Database SQL `LIKE '%login%'` → slow on millions of records.
+Elasticsearch → fast, relevant, ranked results.
+
+### Setup
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+</dependency>
+```
+
+docker-compose addition:
+```yaml
+elasticsearch:
+  image: elasticsearch:8.11.0
+  ports: ["9200:9200"]
+  environment:
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+```
+
+### Features
+```
+GET /api/search?q=authentication bug in production
+→ searches task titles AND descriptions simultaneously
+→ returns results ranked by relevance
+→ highlights matching words in results
+
+Search across: tasks, projects, comments
+Suggestions: autocomplete as you type
+```
+
+```
+document/TaskDocument.java      — Elasticsearch index mapping
+repository/TaskSearchRepository.java
+service/SearchService.java
+controller/SearchController.java
+  GET /api/search?q=keyword&type=task|project&page=0&size=10
+```
+
+---
+
+## 23. Learning Folders
+
+Reference guides already created (non-executable Java files):
+
+| File | Topics |
+|---|---|
+| `learn/microservices/MicroservicesGuide.java` | API Gateway, Eureka, OpenFeign, Circuit Breaker |
+| `learn/kubernetes/KubernetesGuide.java` | Pod, Deployment, Service, HPA, kubectl |
+| `learn/springai/SpringAiGuide.java` | ChatClient, Prompts, RAG, Embeddings |
+| `learn/aws/AwsDeploymentGuide.java` | EC2, RDS, S3, ECS, ElastiCache |
+| `learn/monitoring/MonitoringGuide.java` | Prometheus, Grafana, ELK Stack, Actuator |
+
+To add in later sessions:
+- `learn/performance/PerformanceGuide.java` — N+1, indexing, query optimization
+- `learn/testing/TestingGuide.java` — testing pyramid, TDD, BDD
+- `learn/designpatterns/DesignPatternsGuide.java` — patterns used in this project
+- `learn/frontend/ReactGuide.java` — React patterns, hooks, state management
+- `learn/security/SecurityGuide.java` — OWASP top 10, JWT best practices
+
+---
+
+## 24. Coding Conventions
+
+### Every Java File Pattern
+```
 1. Package declaration
-2. Imports (grouped by library)
-3. Class-level comment block:
-   - WHAT this class does
-   - WHY it exists
-   - HOW it works
-   - Real-world analogy
+2. Imports (grouped: Spring / Jakarta / Lombok / Java)
+3. Class-level comment: WHAT / WHY / HOW / Real-world analogy
 4. Class declaration with annotations
-5. Fields with inline comments
-6. Methods with comments explaining:
-   - What the method does
-   - Why this approach
-   - What could go wrong
-7. Bottom of file: Interview Q&A block
+5. Fields (private, final where possible)
+6. Methods with comments explaining WHY (not what — the name says what)
+7. Bottom: Interview Q&A block
 ```
 
 ### Comment Style
 ```java
 /**
- * WHAT: AuthService handles user registration and login
- * WHY:  Separates business logic from controller (SRP — Single Responsibility)
+ * WHAT: AuthService handles register and login
+ * WHY:  Separates business logic from HTTP layer (SRP)
  * HOW:  Register: validate → hash password → save → generate tokens
- *       Login: authenticate → generate tokens
  *
- * INTERVIEW Q: Why not put this logic directly in the controller?
- * A: Controllers should only handle HTTP concerns (request/response).
- *    Business logic in services makes it testable, reusable, and maintainable.
+ * INTERVIEW Q: Why not put this logic in the controller?
+ * A: Controllers handle HTTP concerns only. Business logic in services
+ *    makes code testable, reusable, and maintainable.
  */
 ```
 
 ### Naming Conventions
-- Entities: `User`, `Project`, `Task` (singular, PascalCase)
-- Repositories: `UserRepository`, `ProjectRepository` (Entity + Repository)
+- Entities: `User`, `Project`, `Task` (singular PascalCase)
+- Repos: `UserRepository` (Entity + Repository)
 - Services: `AuthService`, `ProjectService` (feature + Service)
-- Controllers: `AuthController`, `ProjectController` (feature + Controller)
-- DTOs: `CreateProjectRequest`, `ProjectResponse` (Action + Entity + Request/Response)
-- Exceptions: `ResourceNotFoundException`, `DuplicateResourceException`
+- Controllers: `AuthController` (feature + Controller)
+- Request DTOs: `CreateProjectRequest`, `LoginRequest`
+- Response DTOs: `ProjectResponse`, `AuthResponse`
 
 ### Git Branch Naming
 ```
 devin/session-{N}-{feature-name}
-Example: devin/session-2-projects-tasks-crud
+Examples:
+  devin/session-2-projects-tasks-crud
+  devin/session-11-spring-ai
+  devin/session-14-rate-limiting-email-s3
 ```
 
 ### Git Commit Format
@@ -1192,66 +1339,117 @@ Session {N}: {brief description}
 
 ---
 
-## 16. How to Give This to Another AI
+## 25. Complete Week-by-Week Learning Roadmap
 
-If you want to continue this project with ChatGPT, Claude, Cursor, or any other AI, give them this:
+```
+Week 1:   Session 2 — JPA relationships, Projects + Tasks CRUD
+Week 2:   Session 3 — Search, Filters, Pagination
+Week 3:   Session 4 — AOP, Events, Scheduling
+Week 4:   Session 5 — Razorpay Payments
+Week 5:   Session 6 — Redis Caching + Performance
+Week 6:   Session 7 — Apache Kafka
+Week 7:   Session 8 — React Setup + Auth Pages
+Week 8:   Session 9 — Full Frontend Dashboard
+Week 9:   Session 10 — Docker + Tests + CI/CD
+
+         ← PUT ON RESUME HERE (strong backend + full frontend) →
+
+Week 10:  Session 14 (easy add-ons) — Rate Limiting + Email + Dark Mode
+Week 11:  Session 12 — WebSockets (real-time)
+Week 12:  Session 11 — Spring AI
+Week 13:  Session 13 — OAuth2 Social Login
+Week 14:  Session 15 — Observability (Prometheus + Grafana)
+Week 15:  Session 16 — Frontend Add-ons (Animations, PWA, Tests)
+Week 16:  Session 17 — Elasticsearch
+Week 17:  Polish — README, live deployment on Railway/Render, portfolio
+```
+
+---
+
+## 26. Resume Lines — Final Version
+
+```
+TaskFlow — Full-Stack AI-Powered Project Management Platform
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GitHub: github.com/Raja7380/taskflow  |  Live: taskflow.up.railway.app
+
+• Spring Boot 3 REST API with Spring Security 6 — JWT auth with
+  access/refresh token rotation, BCrypt password hashing, role-based
+  access control (USER/MANAGER/ADMIN), Google OAuth2 social login
+
+• JPA/Hibernate entity relationships (@ManyToOne, @ManyToMany) for
+  Projects, Tasks, Users — dynamic filtering with JPA Specifications,
+  cursor-based pagination, task state machine with transition validation
+
+• Integrated Razorpay payment gateway — order creation, HMAC-SHA256
+  signature verification, webhook processing for subscription management
+
+• Spring AI integration — AI task summarization (Claude API), description
+  generator, natural language task search using prompt engineering
+
+• Real-time features via Spring WebSocket (STOMP) — live Kanban board
+  updates and instant notifications pushed to connected clients
+
+• Redis caching (@Cacheable, @CacheEvict) reducing DB load on frequent
+  reads; Apache Kafka for async event streaming — notifications, audit
+  logs, analytics consumers with Dead Letter Queue
+
+• Rate limiting (Bucket4j) on auth endpoints, transactional email
+  notifications (JavaMailSender + Thymeleaf), file attachments via AWS S3
+
+• React 18 + TypeScript frontend — drag-and-drop Kanban (dnd-kit),
+  Recharts dashboard, dark mode, PWA-enabled, Framer Motion animations,
+  React Query for server state, Zustand for global auth state
+
+• Production observability — Spring Actuator + Prometheus + Grafana
+  dashboard tracking request rates, error rates, DB pool, JVM metrics
+
+• Containerized with Docker Compose (app + PostgreSQL + Redis + Kafka);
+  GitHub Actions CI/CD; 85%+ test coverage (JUnit 5, Mockito, @WebMvcTest,
+  React Testing Library)
+
+Tech Stack:
+  Backend:  Java 17, Spring Boot 3, Spring Security, JPA/Hibernate,
+            PostgreSQL, Redis, Kafka, Spring AI, WebSocket
+  Frontend: React 18, TypeScript, Tailwind CSS, React Query, Zustand
+  DevOps:   Docker, GitHub Actions, AWS S3, Prometheus, Grafana
+```
+
+---
+
+## 27. How to Give This to Another AI
 
 ### Step 1: Share this document
-Copy this entire `PROJECT_MASTER_PLAN.md` and paste it at the start of your conversation.
+Copy the entire `PROJECT_MASTER_PLAN.md` and paste it at the start of your conversation.
 
-### Step 2: Tell them what session to work on
+### Step 2: Tell them what to build
 ```
-"I'm building the TaskFlow project. Session 1 is complete (see master plan).
-Please build Session {N}: {session name}.
+"I'm building TaskFlow (see master plan). Session 1 is complete.
+Build Session {N}: {name}.
 
-Repository: https://github.com/Raja7380/taskflow.git
 Branch from: main
-Create branch: devin/session-{N}-{feature-name}
-Commit as: Raja <rajasingh12587@gmail.com>
+New branch:  devin/session-{N}-{feature-name}
+Commit as:   Raja <rajasingh12587@gmail.com>
 
-Follow the exact specifications in the master plan for Session {N}.
-Every file must have detailed WHY/HOW comments + interview Q&A at the bottom."
+Follow the exact specs in the master plan for Session {N}.
+Every file must have WHAT/WHY/HOW comments + Interview Q&A at the bottom.
+All code must compile: ./mvnw compile"
 ```
 
-### Step 3: Remind them of coding conventions
+### Step 3: Remind them of rules
 ```
-"Follow these rules:
-1. Every file has WHAT/WHY/HOW comments at the top
-2. Every file has Interview Q&A at the bottom
-3. Use Lombok (@Data, @Builder, @RequiredArgsConstructor)
-4. DTOs separate from entities
-5. Global exception handler catches all errors
-6. Swagger annotations on controllers
-7. Service layer pattern: Controller → Service → Repository
-8. All code must compile: ./mvnw compile
-9. Commit under name 'Raja' email 'rajasingh12587@gmail.com'"
-```
-
-### Step 4: After each session, update this master plan
-Mark completed sessions with ✓ and add any new files created.
-
----
-
-## Resume Line (After All Sessions Complete)
-
-```
-TaskFlow — Full-Stack Project Management Platform
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Built microservices-ready project management system using Spring Boot 3, 
-  Spring Security 6 (JWT + OAuth2), Spring Data JPA, PostgreSQL, Redis, Apache Kafka
-• Integrated Razorpay payment gateway with order creation, signature verification, 
-  and webhook processing
-• Implemented event-driven architecture with Kafka for real-time notifications 
-  and comprehensive audit logging via AOP
-• Built React 18 / TypeScript frontend with responsive dashboard, Kanban board, 
-  real-time updates, and Razorpay checkout
-• Containerized with Docker + Docker Compose, CI/CD with GitHub Actions
-• Achieved 85%+ test coverage using JUnit 5, Mockito, and Spring Boot Test
-
-Tech: Java 17, Spring Boot 3, Spring Security, JPA/Hibernate, PostgreSQL, 
-     Redis, Kafka, React 18, TypeScript, Tailwind CSS, Docker, GitHub Actions
+1. Every file has WHAT/WHY/HOW at top, Interview Q&A at bottom
+2. Use Lombok — no manual getters/setters
+3. DTOs separate from entities (never expose entity in API)
+4. Global exception handler catches all errors
+5. Swagger @Tag + @Operation on all controllers
+6. Service layer pattern: Controller → Service → Repository
+7. PostgreSQL (not H2) — Docker must be running
+8. Tests use application-test.yml (H2 auto, no Docker needed)
+9. Commit under: Raja <rajasingh12587@gmail.com>
 ```
 
 ---
 
-*This document is the single source of truth for the TaskFlow project. Keep it updated after each session.*
+*This is the single source of truth for TaskFlow. Update after every session.*
+*Last updated: June 2026 — PostgreSQL migration, full frontend + 7 add-on sessions added.*
