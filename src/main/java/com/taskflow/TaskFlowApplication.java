@@ -2,6 +2,7 @@ package com.taskflow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * TASKFLOW — Project Management System
@@ -41,6 +42,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *    5. Application is ready to handle HTTP requests!
  */
 @SpringBootApplication
+@EnableScheduling  // Activates @Scheduled annotation scanning — needed for Session 4 schedulers
 public class TaskFlowApplication {
 
     public static void main(String[] args) {

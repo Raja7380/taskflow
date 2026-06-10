@@ -97,6 +97,11 @@ public class GlobalExceptionHandler {
      * Note: Spring Security also throws AccessDeniedException for filter-level
      * rejections. Our handler catches both — service-level and filter-level.
      */
+    @ExceptionHandler(InvalidStateTransitionException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidTransition(InvalidStateTransitionException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException ex) {
         return buildErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());

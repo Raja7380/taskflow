@@ -2,7 +2,10 @@ package com.taskflow.controller;
 
 import com.taskflow.dto.request.CreateTaskRequest;
 import com.taskflow.dto.request.UpdateTaskRequest;
+import com.taskflow.dto.response.PagedResponse;
 import com.taskflow.dto.response.TaskResponse;
+import com.taskflow.entity.Priority;
+import com.taskflow.entity.TaskStatus;
 import com.taskflow.entity.User;
 import com.taskflow.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,10 +13,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -120,6 +126,44 @@ public class TaskController {
             @AuthenticationPrincipal User currentUser) {
 
         return ResponseEntity.ok(taskService.updateTask(taskId, request, currentUser));
+    }
+
+    /**
+     * Search tasks with optional filters + pagination.
+     *
+     * ALL parameters are optional. Combine any of them freely.
+     *
+     * GET /api/tasks/search
+     * GET /api/tasks/search?status=IN_PROGRESS
+     * GET /api/tasks/search?priority=HIGH&keyword=bug
+     * GET /api/tasks/search?projectId=1&status=TODO&page=0&size=10
+     * GET /api/tasks/search?assigneeId=5&sortBy=dueDate&sortDir=asc
+     *
+     * @RequestParam(required = false) — parameter is optional. If not sent, Spring injects null.
+     * @RequestParam(defaultValue = "0") — if not sent, defaults to 0.
+     * @DateTimeFormat — tells Spring how to parse a date string from the URL.
+     */
+    @GetMapping("/search")
+    @Operation(
+        summary = "Search tasks with filters and pagination",
+        description = "All parameters optional. Combine any filters. Example: ?status=IN_PROGRESS&priority=HIGH&page=0&size=20"
+    )
+    public ResponseEntity<PagedResponse<TaskResponse>> searchTasks(
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) Priority priority,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long projectId,
+            @RequestParam(required = false) Long assigneeId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dueBefore,
+            @RequestParam(defaultValue = "0")   int page,
+            @RequestParam(defaultValue = "20")  int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        PagedResponse<TaskResponse> response = taskService.searchTasks(
+                status, priority, keyword, projectId, assigneeId,
+                dueBefore, page, size, sortBy, sortDir);
+        return ResponseEntity.ok(response);
     }
 
     /**

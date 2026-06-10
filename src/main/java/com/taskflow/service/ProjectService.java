@@ -1,15 +1,26 @@
 package com.taskflow.service;
 
+import com.taskflow.annotation.Auditable;
 import com.taskflow.dto.request.CreateProjectRequest;
 import com.taskflow.dto.request.UpdateProjectRequest;
+import com.taskflow.dto.response.PagedResponse;
 import com.taskflow.dto.response.ProjectResponse;
 import com.taskflow.entity.Priority;
 import com.taskflow.entity.Project;
+import com.taskflow.entity.ProjectStatus;
 import com.taskflow.entity.User;
+import com.taskflow.event.ProjectCreatedEvent;
 import com.taskflow.exception.ResourceNotFoundException;
 import com.taskflow.repository.ProjectRepository;
 import com.taskflow.repository.UserRepository;
+import com.taskflow.specification.ProjectSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +81,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Create a new project. The logged-in user becomes the owner.
@@ -80,6 +92,7 @@ public class ProjectService {
      * 3. Save to DB → Hibernate generates INSERT statement
      * 4. Return ProjectResponse DTO (not the entity)
      */
+    @Auditable(action = "CREATE_PROJECT", entityType = "Project")
     public ProjectResponse createProject(CreateProjectRequest request, User currentUser) {
         Project project = Project.builder()
                 .name(request.getName())
@@ -92,6 +105,7 @@ public class ProjectService {
                 .build();
 
         Project savedProject = projectRepository.save(project);
+        eventPublisher.publishEvent(new ProjectCreatedEvent(savedProject, currentUser));
         return ProjectResponse.fromEntity(savedProject);
     }
 
@@ -147,6 +161,7 @@ public class ProjectService {
      *   If currentUser is not the owner → throw AccessDeniedException → 403 Forbidden
      *   This is business-level security (not Spring Security filter-level).
      */
+    @Auditable(action = "UPDATE_PROJECT", entityType = "Project")
     public ProjectResponse updateProject(Long projectId, UpdateProjectRequest request, User currentUser) {
         Project project = findProjectOrThrow(projectId);
 
@@ -173,6 +188,7 @@ public class ProjectService {
      * Delete a project — only the OWNER can do this.
      * CascadeType.ALL on tasks means all tasks are deleted automatically.
      */
+    @Auditable(action = "DELETE_PROJECT", entityType = "Project")
     public void deleteProject(Long projectId, User currentUser) {
         Project project = findProjectOrThrow(projectId);
         checkOwnership(project, currentUser, "delete");
@@ -217,6 +233,32 @@ public class ProjectService {
 
         // Hibernate dirty checking: project.members changed → DELETE from project_members
         return ProjectResponse.fromEntity(project);
+    }
+
+    /**
+     * Search projects with optional filters + pagination.
+     * Same pattern as task search — any param can be null.
+     */
+    @Transactional(readOnly = true)
+    public PagedResponse<ProjectResponse> searchProjects(
+            ProjectStatus status,
+            Priority priority,
+            String keyword,
+            int page, int size, String sortBy, String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<Project> spec = Specification
+                .where(ProjectSpecification.hasStatus(status))
+                .and(ProjectSpecification.hasPriority(priority))
+                .and(ProjectSpecification.nameContains(keyword));
+
+        Page<Project> projectPage = projectRepository.findAll(spec, pageable);
+        Page<ProjectResponse> responsePage = projectPage.map(ProjectResponse::fromEntity);
+        return PagedResponse.from(responsePage);
     }
 
     // ---- Private Helper Methods ----

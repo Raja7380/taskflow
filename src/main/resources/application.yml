@@ -52,7 +52,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/taskflow
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: postgres123
+    password: postgress123
     # HikariCP = connection pool (reuses DB connections instead of creating new ones)
     # Without pooling: each request creates/closes a DB connection = very slow
     hikari:

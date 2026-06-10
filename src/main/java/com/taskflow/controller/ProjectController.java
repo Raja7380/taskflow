@@ -2,7 +2,10 @@ package com.taskflow.controller;
 
 import com.taskflow.dto.request.CreateProjectRequest;
 import com.taskflow.dto.request.UpdateProjectRequest;
+import com.taskflow.dto.response.PagedResponse;
 import com.taskflow.dto.response.ProjectResponse;
+import com.taskflow.entity.Priority;
+import com.taskflow.entity.ProjectStatus;
 import com.taskflow.entity.User;
 import com.taskflow.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,6 +121,27 @@ public class ProjectController {
     @Operation(summary = "Get all projects (admin only)")
     public ResponseEntity<List<ProjectResponse>> getAllProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
+    }
+
+    /**
+     * Search projects with optional filters + pagination.
+     *
+     * GET /api/projects/search
+     * GET /api/projects/search?status=ACTIVE&keyword=taskflow&page=0&size=10
+     */
+    @GetMapping("/search")
+    @Operation(summary = "Search projects with filters and pagination")
+    public ResponseEntity<PagedResponse<ProjectResponse>> searchProjects(
+            @RequestParam(required = false) ProjectStatus status,
+            @RequestParam(required = false) Priority priority,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0")   int page,
+            @RequestParam(defaultValue = "20")  int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        return ResponseEntity.ok(
+                projectService.searchProjects(status, priority, keyword, page, size, sortBy, sortDir));
     }
 
     /**

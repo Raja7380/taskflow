@@ -3,6 +3,7 @@ package com.taskflow.repository;
 import com.taskflow.entity.Project;
 import com.taskflow.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -48,7 +49,7 @@ import java.util.List;
  *    This makes JPQL database-agnostic — same query works on PostgreSQL, MySQL, Oracle.
  */
 @Repository
-public interface ProjectRepository extends JpaRepository<Project, Long> {
+public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
 
     // Find all projects owned by this user
     // Generated SQL: SELECT * FROM projects WHERE owner_id = :owner_id
