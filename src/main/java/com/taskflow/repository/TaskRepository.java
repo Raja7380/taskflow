@@ -4,6 +4,7 @@ import com.taskflow.entity.Project;
 import com.taskflow.entity.Task;
 import com.taskflow.entity.TaskStatus;
 import com.taskflow.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TASK REPOSITORY — Data access layer for Task entity.
@@ -44,10 +46,31 @@ import java.util.List;
 // JpaSpecificationExecutor adds: findAll(Specification, Pageable) — needed for dynamic search
 public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
 
-    // All tasks in a project
+    /**
+     * @EntityGraph — fixes N+1 for single task lookup.
+     *
+     * WITHOUT @EntityGraph — TaskResponse.fromEntity() accesses 3 lazy fields:
+     *   task.getProject()   → 1 extra query
+     *   task.getAssignee()  → 1 extra query
+     *   task.getReporter()  → 1 extra query
+     *   Total: 4 queries for one task
+     *
+     * WITH @EntityGraph({"project","assignee","reporter"}):
+     *   All 3 @ManyToOne loaded via a single LEFT JOIN query
+     *   Total: 1 query
+     *
+     * @ManyToOne fields are safe to join-fetch together (no cartesian product risk).
+     * The N+1 risk is with @OneToMany / @ManyToMany collections (like tasks list in Project).
+     */
+    @EntityGraph(attributePaths = {"project", "assignee", "reporter"})
+    Optional<Task> findById(Long id);
+
+    // All tasks in a project — load assignee+reporter eagerly (project already known)
+    @EntityGraph(attributePaths = {"assignee", "reporter"})
     List<Task> findByProjectOrderByCreatedAtDesc(Project project);
 
-    // All tasks assigned to a specific user
+    // Tasks assigned to user — load project+reporter eagerly (assignee already known)
+    @EntityGraph(attributePaths = {"project", "reporter"})
     List<Task> findByAssigneeOrderByDueDateAsc(User assignee);
 
     // All tasks reported/created by a specific user

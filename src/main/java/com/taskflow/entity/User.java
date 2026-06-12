@@ -71,6 +71,17 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    // ---- Subscription fields added in Session 5 ----
+    // Which plan the user is on. Defaults to FREE for all new users.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private SubscriptionPlan subscriptionPlan = SubscriptionPlan.FREE;
+
+    // When the paid subscription expires. null = FREE plan (no expiry needed)
+    // Set to LocalDateTime.now().plusMonths(1) on successful payment
+    private LocalDateTime subscriptionExpiresAt;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

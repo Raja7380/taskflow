@@ -19,6 +19,8 @@ import com.taskflow.repository.TaskRepository;
 import com.taskflow.repository.UserRepository;
 import com.taskflow.specification.TaskSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -112,6 +114,7 @@ public class TaskService {
         return TaskResponse.fromEntity(savedTask);
     }
 
+    @Cacheable(value = "tasks", key = "#taskId")
     @Transactional(readOnly = true)
     public TaskResponse getTaskById(Long taskId) {
         return TaskResponse.fromEntity(findTaskOrThrow(taskId));
@@ -131,6 +134,7 @@ public class TaskService {
                 .stream().map(TaskResponse::fromEntity).collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "tasks", key = "#taskId")
     @Auditable(action = "DELETE_TASK", entityType = "Task")
     public void deleteTask(Long taskId, User currentUser) {
         Task task = findTaskOrThrow(taskId);
@@ -146,6 +150,7 @@ public class TaskService {
      * When the request changes the status field, we check if the transition is valid
      * BEFORE applying any other changes. If invalid, throw immediately.
      */
+    @CacheEvict(value = "tasks", key = "#taskId")
     @Auditable(action = "UPDATE_TASK", entityType = "Task")
     public TaskResponse updateTask(Long taskId, UpdateTaskRequest request, User currentUser) {
         Task task = findTaskOrThrow(taskId);

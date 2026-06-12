@@ -43,7 +43,17 @@ import java.time.LocalDateTime;
  * ============================================================
  */
 @Entity
-@Table(name = "tasks")
+@Table(name = "tasks", indexes = {
+        // Index on FK columns — PostgreSQL does NOT auto-index FK columns (unlike primary keys)
+        // Without indexes, queries like "get all tasks for project X" do a full table scan
+        @Index(name = "idx_task_project",   columnList = "project_id"),
+        @Index(name = "idx_task_assignee",  columnList = "assignee_id"),
+        @Index(name = "idx_task_reporter",  columnList = "reporter_id"),
+        // Index on filter columns — used heavily in search (JPA Specifications)
+        @Index(name = "idx_task_status",    columnList = "status"),
+        @Index(name = "idx_task_due_date",  columnList = "due_date"),
+        @Index(name = "idx_task_priority",  columnList = "priority")
+})
 @Getter
 @Setter
 @NoArgsConstructor

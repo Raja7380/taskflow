@@ -112,6 +112,12 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    // Session 5: Payment failures → 400 Bad Request
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ApiErrorResponse> handlePaymentException(PaymentException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     /**
      * CATCH-ALL — Any unhandled exception ends up here.
      * Returns 500 Internal Server Error with a generic message.

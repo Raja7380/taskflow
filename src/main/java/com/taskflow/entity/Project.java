@@ -79,7 +79,13 @@ import java.util.Set;
  * ============================================================
  */
 @Entity
-@Table(name = "projects")
+@Table(name = "projects", indexes = {
+        // owner_id is a FK column — index it for "get projects by owner" queries
+        @Index(name = "idx_project_owner",  columnList = "owner_id"),
+        // status and priority are used in JPA Specification search filters
+        @Index(name = "idx_project_status", columnList = "status"),
+        @Index(name = "idx_project_priority", columnList = "priority")
+})
 @Getter
 @Setter
 @NoArgsConstructor

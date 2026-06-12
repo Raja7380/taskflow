@@ -77,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",           // Login, register, refresh token
                                 "/api/health",            // Health check
+                                "/api/webhooks/**",       // Razorpay webhook (Session 5) — no JWT, verified by HMAC
                                 "/swagger-ui/**",         // Swagger UI pages
                                 "/swagger-ui.html",       // Swagger entry point
                                 "/v3/api-docs/**"         // OpenAPI JSON docs

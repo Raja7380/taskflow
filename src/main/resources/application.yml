@@ -26,6 +26,30 @@ spring:
   application:
     name: TaskFlow
 
+  # ---- REDIS CACHE CONFIGURATION (Session 6) ----
+  #
+  # Redis = in-memory key-value store. Data lives in RAM → ultra fast.
+  # Used for: caching, rate limiting, session storage, leaderboards.
+  #
+  # WHY REDIS?
+  #   PostgreSQL query: ~5-20ms (disk I/O, CPU for query planning)
+  #   Redis lookup:     ~0.1-1ms (pure RAM, O(1) hash lookup)
+  #
+  #   For getProjectById: 10ms → 0.1ms = 100x faster after first request.
+  #   At 1000 requests/sec, this saves 10 seconds of DB load per second!
+  #
+  # HOW TO START REDIS:
+  #   docker-compose up -d redis
+  #   Redis runs on localhost:6379 (default port)
+  #
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000ms  # connection timeout — fail fast if Redis is unreachable
+  cache:
+    type: redis  # Use Redis as the cache provider (default would be in-memory ConcurrentHashMap)
+
   # ---- POSTGRESQL DATABASE CONFIGURATION ----
   #
   # WHAT IS POSTGRESQL?
@@ -112,3 +136,31 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /v3/api-docs
+
+# ---- RAZORPAY CONFIGURATION (Session 5) ----
+#
+# HOW TO GET YOUR KEYS:
+#   1. Sign up at https://razorpay.com (free, no credit card needed for test mode)
+#   2. Settings -> API Keys -> Generate Test Key
+#   3. Replace the values below with your actual test keys
+#   4. For webhook-secret: Dashboard -> Webhooks -> Create webhook -> copy secret
+#
+# TEST CARD for Razorpay test mode:
+#   Card number: 4111 1111 1111 1111
+#   Expiry:      Any future date
+#   CVV:         Any 3 digits
+#   OTP:         1234
+#
+# KEY TYPES:
+#   rzp_test_... = test mode (no real money, use test cards)
+#   rzp_live_... = live mode (real money — only in production)
+#
+# PRODUCTION: Use environment variables instead of hardcoding here:
+#   export RAZORPAY_KEY_ID=rzp_test_yourRealKeyId
+#   export RAZORPAY_KEY_SECRET=yourRealSecret
+#   The ${VAR:default} syntax uses env var if set, otherwise uses the default value.
+#
+razorpay:
+  key-id: ${RAZORPAY_KEY_ID:rzp_test_REPLACE_WITH_YOUR_KEY_ID}
+  key-secret: ${RAZORPAY_KEY_SECRET:REPLACE_WITH_YOUR_KEY_SECRET}
+  webhook-secret: ${RAZORPAY_WEBHOOK_SECRET:REPLACE_WITH_YOUR_WEBHOOK_SECRET}

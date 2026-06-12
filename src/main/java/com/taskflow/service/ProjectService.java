@@ -15,6 +15,8 @@ import com.taskflow.repository.ProjectRepository;
 import com.taskflow.repository.UserRepository;
 import com.taskflow.specification.ProjectSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -111,11 +113,21 @@ public class ProjectService {
 
     /**
      * Get a single project by ID.
-     * Throws 404 if not found.
      *
-     * AUTHORIZATION: any authenticated user can VIEW a project.
-     * (In a real app you'd check they're a member — Session 6 adds that nuance.)
+     * @Cacheable(value = "projects", key = "#projectId"):
+     *   FIRST request:  Cache miss → DB query → store result in Redis → return
+     *   NEXT requests:  Cache hit  → return from Redis (no DB query!)
+     *
+     * Key format in Redis: "taskflow:projects::1" (prefix + cache + "::" + key)
+     * TTL: 10 minutes (configured in RedisConfig)
+     *
+     * WHY CACHE DTOs NOT ENTITIES?
+     *   If we cached Project entities, the entity would be detached from Hibernate
+     *   when retrieved from cache. Any lazy loading would throw LazyInitializationException.
+     *   ProjectResponse (DTO) has no Hibernate dependencies — safe to cache forever.
+     *   Rule: Only cache serializable DTOs, never JPA entities.
      */
+    @Cacheable(value = "projects", key = "#projectId")
     @Transactional(readOnly = true)
     public ProjectResponse getProjectById(Long projectId) {
         Project project = findProjectOrThrow(projectId);
@@ -161,6 +173,9 @@ public class ProjectService {
      *   If currentUser is not the owner → throw AccessDeniedException → 403 Forbidden
      *   This is business-level security (not Spring Security filter-level).
      */
+    // @CacheEvict removes the cached entry for this project after update.
+    // Next call to getProjectById(projectId) will re-query DB and cache fresh data.
+    @CacheEvict(value = "projects", key = "#projectId")
     @Auditable(action = "UPDATE_PROJECT", entityType = "Project")
     public ProjectResponse updateProject(Long projectId, UpdateProjectRequest request, User currentUser) {
         Project project = findProjectOrThrow(projectId);
@@ -188,6 +203,7 @@ public class ProjectService {
      * Delete a project — only the OWNER can do this.
      * CascadeType.ALL on tasks means all tasks are deleted automatically.
      */
+    @CacheEvict(value = "projects", key = "#projectId")
     @Auditable(action = "DELETE_PROJECT", entityType = "Project")
     public void deleteProject(Long projectId, User currentUser) {
         Project project = findProjectOrThrow(projectId);
@@ -205,6 +221,8 @@ public class ProjectService {
      * 4. Check user isn't already a member (idempotent — adding twice is a no-op)
      * 5. Add to members Set → @JoinTable handles the INSERT into project_members
      */
+    // Adding a member changes memberCount in the cached ProjectResponse — evict it
+    @CacheEvict(value = "projects", key = "#projectId")
     public ProjectResponse addMember(Long projectId, Long userId, User currentUser) {
         Project project = findProjectOrThrow(projectId);
         checkOwnership(project, currentUser, "add members to");
@@ -222,6 +240,7 @@ public class ProjectService {
     /**
      * Remove a member from a project — only the OWNER can remove members.
      */
+    @CacheEvict(value = "projects", key = "#projectId")
     public ProjectResponse removeMember(Long projectId, Long userId, User currentUser) {
         Project project = findProjectOrThrow(projectId);
         checkOwnership(project, currentUser, "remove members from");
